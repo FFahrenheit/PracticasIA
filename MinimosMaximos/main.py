@@ -33,7 +33,8 @@ def main():
     exercises = [
         [1, -4, 1, 6],
         [6, -12, 5, -2],
-        [1/3, 8, 63, 7]
+        [1/3, 8, 63, 7],
+        [2, 9, 12, -13]
     ]
     [ process(exercise) for exercise in exercises ]
 
