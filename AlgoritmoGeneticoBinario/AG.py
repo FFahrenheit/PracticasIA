@@ -36,7 +36,7 @@ class AG:
             self.mutacion(hijos)
             self._individuos = np.copy(hijos)
             self._individuos[np.random.randint(len(self._individuos))] = copy.deepcopy(self._mejor_historico)
-            print("Generación: ", generacion, 'Mejor Histórico: ', self._mejor_historico._cromosoma, self._mejor_historico._fitness)
+            print("Generación: ", generacion + 1, 'Mejor Histórico: ', self._mejor_historico._cromosoma, self._mejor_historico._fitness)
             generacion += 1
         
         return self._mejor_historico._cromosoma

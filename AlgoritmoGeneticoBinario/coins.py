@@ -4,7 +4,7 @@ class Coins:
 
     def f(self, longitud_gen, cromosoma):
         total = 0
-        juntos = 1
+        juntos = 0
         anterior = False
         for index, gen in enumerate(cromosoma):
             if gen:
@@ -15,5 +15,5 @@ class Coins:
             else:
                 anterior = False
 
-        return total ** (1/juntos)
+        return total ** (1/(1+juntos))
 
