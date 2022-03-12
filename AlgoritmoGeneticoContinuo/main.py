@@ -31,14 +31,15 @@ def main():
             _, ax = plt.subplots(1)
             ax.plot(generaciones, promedio, colors[dimension])
             plt.title(f"{funcion.__name__} de {dimension} dimensiones")
-            ax.set_ylim(ymin=0)
+            # ax.set_ylim(ymin=0)
             plt.show()
         
         _, ax = plt.subplots(1)
         [ plt.plot(generaciones, promedios[index], colors[dimension], 
             label = f"{dimension} Dimensiones") for index, dimension in enumerate(dimensiones)]
         ax.legend(loc='upper right', frameon = False)
-        ax.set_ylim(ymin=0)
+        # ax.set_ylim(ymin=0)
+        plt.title(f"{funcion.__name__}")
         plt.show()
 
 def get_promedios(ejecuciones):
