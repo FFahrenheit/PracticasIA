@@ -20,7 +20,8 @@ class AGC:
     def run(self):
         self.crearIndividuos()
         self._mejor_historico = self._individuos[0]
-        generacion = 1
+        generaciones = [ ]
+        generacion = 0
         while generacion <= self._generaciones:
             self.evaluaIndividuos()
             self.mejor()
@@ -37,9 +38,11 @@ class AGC:
             self._individuos = np.copy(hijos)
 
             if generacion % 100 == 0:
-                print(f'Generación: {generacion} Mejor Histórico: \
-{self._mejor_historico._cromosoma} {self._mejor_historico._fitness :.5f}')
+                print(f'Generación: {generacion} Mejor Histórico: ', end='')
+                print(f'{self._mejor_historico._cromosoma} {self._mejor_historico._fitness :.5f}')
+                generaciones.append(abs(self._mejor_historico._fitness))
             generacion += 1
+        return generaciones
 
     def crearIndividuos(self):
         rango = (self._problema.MAX_VALUE - self._problema.MIN_VALUE)
