@@ -37,8 +37,6 @@ def main():
             promedios.append(promedio)
             
             _, ax = plt.subplots(1)
-            print(generaciones)
-            print(promedio)
 
             ax.plot(generaciones, promedio, colors[dimension])
             
