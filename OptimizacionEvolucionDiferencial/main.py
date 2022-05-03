@@ -22,8 +22,8 @@ def main():
             ejecuciones = []
             for _ in range(numero_ejecuciones):
                 cantidad_individuos = 30
-                f = 0.7
-                c = 0.4
+                f = 0.6
+                c = 0.3
                 problema = Funcion()
 
                 n_generaciones = 2000

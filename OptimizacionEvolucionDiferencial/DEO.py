@@ -19,17 +19,18 @@ class DEO:
         self.range = self.problem.MAX_VALUE - self.problem.MIN_VALUE
 
     def run(self):
-        self.individuals = np.array([ np.random.random(size = self.dimensions) * self.range - self.problem.MIN_VALUE
+        self.individuals = np.array([ np.random.random(size = self.dimensions) * self.range + self.problem.MIN_VALUE
             for _ in range(self.individuals_count) ])
         
         generations = []
         generation = 0
 
-        v = []
-        u = []
+        best = self.individuals[0]
+        best_fitness = self.problem.fitness(best)
         
-        print(f"1: {self.individuals_count}\t 2:{len(self.individuals)}")
         while generation <= self.generation_count:
+            u = []
+            v = []
             for i in range(self.individuals_count):
                 r1 = self.randint_excluding([i])
                 r2 = self.randint_excluding([i, r1])
@@ -39,7 +40,7 @@ class DEO:
                     self.individuals[r1] + self.stepsize * (self.individuals[r2] - self.individuals[r3])
                 )
                 
-                tr = self.randint_excluding([])
+                tr = np.random.randint(0, self.dimensions)
 
                 u_vector = []
                 for j in range(self.dimensions):
@@ -49,19 +50,21 @@ class DEO:
                         u_vector.append(v[i][j])
                     else:
                         u_vector.append(self.individuals[i][j])
+
                 u.append(u_vector)
 
-            best = self.individuals[i]
+
             for i in range(self.individuals_count):
                 if self.problem.fitness(u[i]) < self.problem.fitness(self.individuals[i]):
                     self.individuals[i] = copy.deepcopy(u[i])
                 
-                if self.problem.fitness(self.individuals[i]) < self.problem.fitness(best):
-                    best = copy.deepcopy(u[i])
+                if self.problem.fitness(self.individuals[i]) < best_fitness:
+                    best = copy.deepcopy(self.individuals[i])
+                    best_fitness = self.problem.fitness(best)
 
             if generation % 100 == 0:
-                print('Generation ', generation, ':', best)
-                generations.append(abs(self.problem.fitness(best)))
+                print('Generation ', generation, ':', best_fitness)
+                generations.append(best_fitness)
             generation += 1
         
         return generations
