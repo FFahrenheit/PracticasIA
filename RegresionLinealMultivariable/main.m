@@ -2,14 +2,15 @@ clear all;
 close all;
 clc;
 
-% Lectura de datos
+%  Lectura de datos
 datos = load("dataset_RegresionLinealMultivariable.txt");
 x = datos(:,1:2);
+xDatos = x;
 y = datos(:,3);
 
 [m, n]= size(x);
 
-%Gráfica de datos
+% Gráfica de datos
 figure(1);
 plot3(x(:,1), x(:,2), y, 'ok', 'MarkerFaceColor', 'y');
 xlabel('x1');
@@ -39,23 +40,22 @@ x = [ones(m,1), x];
 n = n + 1;
 
 a = zeros(n, 1);
-beta = 0.023;
-iterMax = 200;
+beta = 0.8;
+iterMax = 600;
 iter = 1;
 
-% Cálculo de hipótesis
+%Cálculo de hipótesis
 for i=1:m
     h(i,1) = a'*x(i,:)';
 end
+disp(size(h));
 J = (1/(2*m))*sum((h - y).^2);
-
-%plot(x, h, 'r');
 
 while (iter < iterMax)
     convergencia(iter) = J;
 
     for j=1:n
-        a(j) = a(j) - beta*(1/n)*sum(h-y).*x(:,j);
+        a(j) = a(j) - beta*(1/m)*sum((h-y).*x(:,j));
     end
     
     for i=1:m
@@ -66,12 +66,15 @@ while (iter < iterMax)
     iter = iter + 1;
 end
 
-plot(convergencia, '*');
+figure(3);
+plot(convergencia);
+hold on;
 
-datoEntrada = [1 0.75 1.12];
-%figure(1);
-hDatoEntrada = a'*datoEntrada';
-%plot(datoEntrada, hDatoEntrada, 'ok', 'MarkerFaceColor', 'm');
+fprintf("J = %0.4f\ta0 = %0.4f\ta1 = %0.4f\ta2 = %0.4f\n", J, a(1), a(2), a(3));
 
-%fprintf("J = %d\t a0 = %d\t a1 = %d\n", J, a0, a1);
-%fprintf("x = %d\t y = 7.5435\t h = %d\n", datoEntrada, hDatoEntrada);
+% Datos de prueba
+prueba = 1;
+for i=5:7
+    fprintf("Dato de prueba %d\tx1 = %d\tx2 = %d\tSalida correcta y = %d\tPrediccion h = %0.4f\n", prueba, xDatos(i,1), xDatos(i,2), y(i), h(i));
+    prueba = prueba + 1;
+end
