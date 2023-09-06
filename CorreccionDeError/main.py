@@ -1,4 +1,4 @@
-# pyside2-uic .\mainwindow.ui > ui_mainwindow.py
+# pyside2-uic mainwindow.ui > ui_mainwindow.py
 from PySide2.QtWidgets import QApplication
 from mainwindow import MainWindow
 import sys
@@ -8,6 +8,7 @@ if __name__ == '__main__':
     app = QApplication()
     # Crear ventana
     window = MainWindow()
+    window.setWindowTitle("Algoritmo de corrección de error")
     # Se hace visible
     window.show()
     # Qt loo´p

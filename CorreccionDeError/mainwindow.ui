@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>Algoritmo de corrección de error</string>
+       <string>Presione click izquierdo para poner &quot;1&quot; y click derecho para poner &quot;0&quot;</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">

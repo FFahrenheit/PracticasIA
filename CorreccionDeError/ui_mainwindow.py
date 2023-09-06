@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Algoritmo de correcci\u00f3n de error", None))
+        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Presione click izquierdo para poner \"1\" y click derecho para poner \"0\"", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Datos de entrenamiento", None))
         self.w2_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.b_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
