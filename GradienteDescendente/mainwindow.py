@@ -50,51 +50,58 @@ class MainWindow(QMainWindow):
         if len(self.data) <= 0:
             return self.print_error("Datos insuficientes","No hay suficientes patrones de entrenamiento")
         
-        n = str(self.ui.learning_rate.text())
+        self.n = str(self.ui.learning_rate.text())
+        self.max_iterations = str(self.ui.max_iterations.text())
+        self.target_error = str(self.ui.target_error.text())
 
         try:
-            n = float(n)
+            self.n = float(self.n)
+            self.max_iterations = int(self.max_iterations)
+            self.target_error = float(self.target_error)
         except ValueError:
-            return self.print_error("Datos erroneos", "Constante de entrenamiento debe ser numerica")
+            return self.print_error("Datos erroneos", "Constante de entrenamiento y error objeto deben ser numericos. Iteraciones maximas debe ser entero")
         
-        if n <= 0 or n >= 1:
+        if self.n <= 0 or self.n >= 1:
             return self.print_error("Datos erroneos", "Constante de entrenamiento debe estar entre 0 y 1")
         
+        if self.max_iterations < 1:
+            return self.print_error("Datos erroneos", " Iteraciones maximas deben ser mayores a 0")
+        
+        if self.target_error <= 0:
+            return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
+        
         self.is_running = True
-        self.run_algorithm(n)
+        self.run_algorithm()
 
-    def run_algorithm(self, n):
-        b = random()
-        w1 = random()
-        w2 = random()
+    def run_algorithm(self):
+        w = np.array([random(), random()])
 
-        error = True
+        error = 1e10
         iterations = 0
         self.plot_solutions = []
 
-        while error and iterations < MAX_ITERATIONS:
-            error = False
+        while error > self.target_error and iterations < self.max_iterations:
+            error = 0
             for pattern in self.data:
-                x1, x2, y = pattern
+                x, y = pattern
 
-                v = x1*w1 + x2*w2 + b
-                u = self.activation_function(v)
-                e = y - u
+                v = w[0]*x + w[1]
+                e = y - v
 
-                if e != 0:
-                    error = True
+                error += e**2
 
-                w1 = w1 + n*e*x1
-                w2 = w2 + n*e*x2
-                b = b + n*e
-            
+                w = w + self.n*e*np.array([x, 1])
+
+                print(w)
+
+            error /= len(self.data)
+
             # Plot solution
-            m = -w1/w2
-            c = -b/w2
+            m, c = w
 
-            x_plot = np.array([-1, 1])
+            x_plot = np.array([-10, 10])
             y_plot = m*x_plot + c
-            self.plot_solutions.append([x_plot, y_plot, [w1, w2, b]])
+            self.plot_solutions.append([x_plot, y_plot, [m, c]])
 
             iterations += 1
         
@@ -109,15 +116,15 @@ class MainWindow(QMainWindow):
                 self.ax.lines.pop()
             
             x, y, solution = self.plot_solutions[self.plot_index]
-            w1, w2, b = solution
+            m, c = solution
 
             self.ax.plot(x, y, linestyle='-', color='g')
             self.canvas.draw()
 
             self.ui.iteration_label.setText(str(self.plot_index + 1))
-            self.ui.b_label.setText(str(round(b, 3)))
-            self.ui.w1_label.setText(str(round(w1, 3)))
-            self.ui.w2_label.setText(str(round(w2, 3)))
+            # self.ui.b_label.setText(str(round(b, 3)))
+            self.ui.w1_label.setText(f"{m:.4g}")
+            self.ui.w2_label.setText(f"{c:.4g}")
 
             self.plot_index += 1
             QTimer.singleShot(DELAY, self.plot_with_delay)
@@ -138,17 +145,11 @@ class MainWindow(QMainWindow):
         
         x, y = event.xdata, event.ydata
         
-        if event.button == LEFT_CLICK:
-            result = 1
+        if event.button == LEFT_CLICK or event.button == RIGHT_CLICK:
             self.ax.plot(x, y, 'bo')
-        elif event.button == RIGHT_CLICK:
-            result = 0
-            self.ax.plot(x, y, 'ro')
 
         self.canvas.draw()
-
-        self.data.append([x, y, result])
-        # print(x, y, result)
+        self.data.append([x, y])
 
 
     def draw_chart(self):
@@ -156,14 +157,14 @@ class MainWindow(QMainWindow):
         self.ax = self.figure.add_subplot(111)
 
         # Set the labels 
-        self.ax.set_xlabel('w1')
-        self.ax.set_ylabel('w2')
+        self.ax.set_xlabel('x')
+        self.ax.set_ylabel('y')
         self.ax.xaxis.set_label_coords(0.95, 0.5)
         self.ax.yaxis.set_label_coords(0.5, 0.95)
 
         # Set axis limits to ensure all four quadrants are visible
-        self.ax.set_xlim(-1, 1)
-        self.ax.set_ylim(-1, 1)
+        self.ax.set_xlim(-10, 10)
+        self.ax.set_ylim(-10, 10)
 
         # Add horizontal and vertical lines at the origin (0,0)
         self.ax.axhline(0, color='black', linewidth=0.8)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>694</width>
-    <height>394</height>
+    <width>640</width>
+    <height>423</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -143,7 +143,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Época</string>
+             <string>Iteración</string>
             </property>
            </widget>
           </item>
@@ -167,7 +167,7 @@
              </font>
             </property>
             <property name="text">
-             <string>0.4</string>
+             <string>0.02</string>
             </property>
            </widget>
           </item>
@@ -219,6 +219,30 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>MSE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="current_error">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -235,7 +259,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>694</width>
+     <width>640</width>
      <height>21</height>
     </rect>
    </property>

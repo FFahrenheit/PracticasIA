@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(694, 394)
+        MainWindow.resize(640, 423)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -130,6 +130,18 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.label_7, 2, 1, 1, 1)
 
+        self.label_8 = QLabel(self.groupBox_4)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font)
+
+        self.gridLayout_3.addWidget(self.label_8, 4, 1, 1, 1)
+
+        self.current_error = QLabel(self.groupBox_4)
+        self.current_error.setObjectName(u"current_error")
+        self.current_error.setFont(font)
+
+        self.gridLayout_3.addWidget(self.current_error, 4, 2, 1, 1)
+
 
         self.gridLayout.addWidget(self.groupBox_4, 0, 1, 1, 1)
 
@@ -144,7 +156,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 694, 21))
+        self.menubar.setGeometry(QRect(0, 0, 640, 21))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -168,12 +180,14 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"Raz\u00f3n de aprendizaje", None))
         self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"c", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u00c9poca", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Iteraci\u00f3n", None))
         self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
-        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.4", None))
+        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.02", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"x", None))
         self.max_iterations.setText(QCoreApplication.translate("MainWindow", u"50", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Iteraciones m\u00e1ximas", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"MSE", None))
+        self.current_error.setText(QCoreApplication.translate("MainWindow", u"-", None))
     # retranslateUi
 
