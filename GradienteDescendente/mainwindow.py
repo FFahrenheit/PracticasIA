@@ -10,6 +10,7 @@ import numpy as np
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
 MAX_ITERATIONS = 100
+DELAY = 100
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -119,7 +120,7 @@ class MainWindow(QMainWindow):
             self.ui.w2_label.setText(str(round(w2, 3)))
 
             self.plot_index += 1
-            QTimer.singleShot(500, self.plot_with_delay)
+            QTimer.singleShot(DELAY, self.plot_with_delay)
         else:
             self.is_running = False
             self.plot_solutions = []

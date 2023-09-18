@@ -8,7 +8,7 @@ if __name__ == '__main__':
     app = QApplication()
     # Crear ventana
     window = MainWindow()
-    window.setWindowTitle("Algoritmo de gradiente descendiente")
+    window.setWindowTitle("Algoritmo de gradiente descendente")
     # Se hace visible
     window.show()
     # Qt loop

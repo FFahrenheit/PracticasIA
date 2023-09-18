@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>559</width>
-    <height>340</height>
+    <width>694</width>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,31 @@
           <string>Datos de entrenamiento</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="6" column="2">
+          <item row="5" column="2">
+           <widget class="QLabel" name="w1_label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="target_error">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="2">
            <widget class="QLabel" name="b_label">
             <property name="font">
              <font>
@@ -36,6 +60,42 @@
             </property>
             <property name="text">
              <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QLabel" name="w2_label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="iteration_label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>x2</string>
             </property>
            </widget>
           </item>
@@ -51,7 +111,7 @@
             </property>
            </widget>
           </item>
-          <item row="9" column="1" colspan="2">
+          <item row="11" column="1" colspan="2">
            <widget class="QPushButton" name="begin_button">
             <property name="font">
              <font>
@@ -63,19 +123,31 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="label_3">
+          <item row="8" column="1">
+           <widget class="QLabel" name="label_4">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>ω2</string>
+             <string>c</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="1" colspan="2">
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Época</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1" colspan="2">
            <widget class="QPushButton" name="clear_button">
             <property name="font">
              <font>
@@ -84,30 +156,6 @@
             </property>
             <property name="text">
              <string>Limpiar</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>ω1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_4">
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>b</string>
             </property>
            </widget>
           </item>
@@ -123,51 +171,51 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="w2_label">
+          <item row="6" column="1">
+           <widget class="QLabel" name="label_3">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>-</string>
+             <string>x</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="w1_label">
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="max_iterations">
             <property name="font">
              <font>
-              <pointsize>14</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>-</string>
+             <string>50</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="label_6">
             <property name="font">
              <font>
-              <pointsize>14</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Época</string>
+             <string>Error objetivo</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="iteration_label">
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_7">
             <property name="font">
              <font>
-              <pointsize>14</pointsize>
+              <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>-</string>
+             <string>Iteraciones máximas</string>
             </property>
            </widget>
           </item>
@@ -187,7 +235,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>559</width>
+     <width>694</width>
      <height>21</height>
     </rect>
    </property>
