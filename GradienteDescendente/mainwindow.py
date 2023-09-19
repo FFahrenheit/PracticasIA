@@ -11,6 +11,8 @@ LEFT_CLICK = 1
 RIGHT_CLICK = 3
 MAX_ITERATIONS = 100
 DELAY = 100
+LINEAR = 0
+QUADRATIC = 1
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -37,9 +39,10 @@ class MainWindow(QMainWindow):
         self.draw_chart()
         self.canvas.draw()
         self.ui.iteration_label.setText("-")
-        self.ui.b_label.setText("-")
-        self.ui.w1_label.setText("-")
-        self.ui.w2_label.setText("-")
+        self.ui.x_label.setText("-")
+        self.ui.x2_label.setText("-")
+        self.ui.c_label.setText("-")
+        self.ui.current_error.setText("-")
         self.initilize_algorithm()
 
     @Slot()
@@ -53,6 +56,7 @@ class MainWindow(QMainWindow):
         self.n = str(self.ui.learning_rate.text())
         self.max_iterations = str(self.ui.max_iterations.text())
         self.target_error = str(self.ui.target_error.text())
+        self.degree = self.ui.grade_input.currentIndex()
 
         try:
             self.n = float(self.n)
@@ -74,7 +78,8 @@ class MainWindow(QMainWindow):
         self.run_algorithm()
 
     def run_algorithm(self):
-        w = np.array([random(), random()])
+        terms = 2 + self.degree
+        w = np.array([random() for _ in range(terms)])
 
         error = 1e10
         iterations = 0
@@ -85,24 +90,19 @@ class MainWindow(QMainWindow):
             for pattern in self.data:
                 x, y = pattern
 
-                v = w[0]*x + w[1]
+                v = sum(value*x**(terms - i - 1) for i, value in enumerate(w))
                 e = y - v
-
                 error += e**2
 
-                w = w + self.n*e*np.array([x, 1])
-
-                print(w)
+                w = w + self.n*e*np.array([x**i for i in range(terms - 1, -1, -1)])
 
             error /= len(self.data)
 
-            # Plot solution
-            m, c = w
-
-            x_plot = np.array([-10, 10])
-            y_plot = m*x_plot + c
-            self.plot_solutions.append([x_plot, y_plot, [m, c]])
-
+            print(error)
+            self.plot_solutions.append({
+                "solution": w,
+                "error": error
+            })
             iterations += 1
         
         print(f"Algoritmo finalizado con éxito {not error} en {iterations} iteraciones")
@@ -115,16 +115,30 @@ class MainWindow(QMainWindow):
             if self.plot_index != 0:
                 self.ax.lines.pop()
             
-            x, y, solution = self.plot_solutions[self.plot_index]
-            m, c = solution
+            solution = self.plot_solutions[self.plot_index]
+            w = solution['solution']
+            error = solution['error']
+
+            if self.degree == LINEAR:
+                m, c = w
+                a = 0
+                x = np.array([-10, 10])
+                y = m*x + c
+                self.ui.label_3.setText("m")
+            elif self.degree == QUADRATIC:
+                a, m, c = w
+                x = np.arange(-10, 10, 0.1)
+                y = a*x**2 + m*x + c
+                self.ui.label_3.setText("b")
+            
+            self.ui.current_error.setText(f"{error:.4g}")
+            self.ui.iteration_label.setText(str(self.plot_index + 1))
+            self.ui.x2_label.setText(f"{a:.4g}")
+            self.ui.x_label.setText(f"{m:.4g}")
+            self.ui.c_label.setText(f"{c:.4g}")
 
             self.ax.plot(x, y, linestyle='-', color='g')
             self.canvas.draw()
-
-            self.ui.iteration_label.setText(str(self.plot_index + 1))
-            # self.ui.b_label.setText(str(round(b, 3)))
-            self.ui.w1_label.setText(f"{m:.4g}")
-            self.ui.w2_label.setText(f"{c:.4g}")
 
             self.plot_index += 1
             QTimer.singleShot(DELAY, self.plot_with_delay)
