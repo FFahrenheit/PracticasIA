@@ -9,7 +9,7 @@ import numpy as np
 
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
-MAX_ITERATIONS = 100
+MAX_ITERATIONS = 50
 DELAY = 500
 
 class MainWindow(QMainWindow):

@@ -9,7 +9,6 @@ import numpy as np
 
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
-MAX_ITERATIONS = 100
 DELAY = 100
 LINEAR = 0
 QUADRATIC = 1
@@ -98,14 +97,13 @@ class MainWindow(QMainWindow):
 
             error /= len(self.data)
 
-            print(error)
             self.plot_solutions.append({
                 "solution": w,
                 "error": error
             })
             iterations += 1
         
-        print(f"Algoritmo finalizado con éxito {not error} en {iterations} iteraciones")
+        print(f"Algoritmo finalizado con error {error} en {iterations} iteraciones")
         self.plot_index = 0
         self.plot_with_delay()
 
@@ -115,9 +113,9 @@ class MainWindow(QMainWindow):
             if self.plot_index != 0:
                 self.ax.lines.pop()
             
-            solution = self.plot_solutions[self.plot_index]
-            w = solution['solution']
-            error = solution['error']
+            plot = self.plot_solutions[self.plot_index]
+            w = plot['solution']
+            error = plot['error']
 
             if self.degree == LINEAR:
                 m, c = w
@@ -146,9 +144,6 @@ class MainWindow(QMainWindow):
             self.is_running = False
             self.plot_solutions = []
 
-    def activation_function(self, v):
-        return 0 if v < 0 else 1
-
     def initilize_algorithm(self):
         self.is_running = False
         self.data = []
@@ -161,9 +156,8 @@ class MainWindow(QMainWindow):
         
         if event.button == LEFT_CLICK or event.button == RIGHT_CLICK:
             self.ax.plot(x, y, 'bo')
-
-        self.canvas.draw()
-        self.data.append([x, y])
+            self.canvas.draw()
+            self.data.append([x, y])
 
 
     def draw_chart(self):
