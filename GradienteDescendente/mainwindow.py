@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QMainWindow, QMessageBox
-from PySide2.QtCore import Slot, QTimer
+from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtCore import Slot, QTimer
 from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -110,8 +110,9 @@ class MainWindow(QMainWindow):
     def plot_with_delay(self):
         if self.plot_index < len(self.plot_solutions):
             
-            if self.plot_index != 0:
-                self.ax.lines.pop()
+            if self.plot_index != 0 and self.last_line is not None:
+                self.ax.lines[-1].remove()
+                # self.ax.lines.pop()
             
             plot = self.plot_solutions[self.plot_index]
             w = plot['solution']
@@ -135,7 +136,7 @@ class MainWindow(QMainWindow):
             self.ui.x_label.setText(f"{m:.4g}")
             self.ui.c_label.setText(f"{c:.4g}")
 
-            self.ax.plot(x, y, linestyle='-', color='g')
+            self.last_line = self.ax.plot(x, y, linestyle='-', color='g')
             self.canvas.draw()
 
             self.plot_index += 1

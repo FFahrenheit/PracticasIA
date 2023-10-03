@@ -1,5 +1,5 @@
-# pyside2-uic mainwindow.ui > ui_mainwindow.py
-from PySide2.QtWidgets import QApplication
+#  C:/Python39/Lib/site-packages/PySide6/uic mainwindow.ui > ui_mainwindow.py -g python
+from PySide6.QtWidgets import QApplication
 from mainwindow import MainWindow
 import sys
 

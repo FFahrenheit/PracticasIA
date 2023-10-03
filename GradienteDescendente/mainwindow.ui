@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>423</height>
+    <width>702</width>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>Presione click izquierdo para poner &quot;1&quot; y click derecho para poner &quot;0&quot;</string>
+       <string>Haga click en el plano para ingresar un patrón de entrenamiento</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
@@ -290,8 +290,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
-     <height>21</height>
+     <width>702</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
