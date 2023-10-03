@@ -1,5 +1,5 @@
 # pyside2-uic mainwindow.ui > ui_mainwindow.py
-from PySide2.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 from mainwindow import MainWindow
 import sys
 
@@ -12,4 +12,4 @@ if __name__ == '__main__':
     # Se hace visible
     window.show()
     # Qt loop
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

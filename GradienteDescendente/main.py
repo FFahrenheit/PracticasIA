@@ -12,4 +12,4 @@ if __name__ == '__main__':
     # Se hace visible
     window.show()
     # Qt loop
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

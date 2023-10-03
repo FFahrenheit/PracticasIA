@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QMainWindow, QMessageBox
-from PySide2.QtCore import Slot, QTimer
+from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtCore import Slot, QTimer
 from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -15,8 +15,10 @@ QUADRATIC = 1
 
 class Algorithm:
     def __init__(self):
-        self.figure = None
-        self.canvas = None
+        self.figure = Figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.data = []
+        self.is_running = False
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,12 +28,6 @@ class MainWindow(QMainWindow):
 
         self.classification = Algorithm()
         self.regression = Algorithm()
-
-        self.classification.figure = Figure()
-        self.classification.canvas = FigureCanvas(self.classification.figure)
-
-        self.regression.figure = Figure()
-        self.regression.canvas = FigureCanvas(self.regression.figure)
 
         self.ui.plot_area.addWidget(self.classification.canvas)
         self.ui.plot_area_2.addWidget(self.regression.canvas)
@@ -143,7 +139,7 @@ class MainWindow(QMainWindow):
         self.is_running = True
         self.run_regression()
 
-    def run_algorithm(self):
+    def run_classification(self):
         terms = 2 + self.degree
         w = np.array([random() for _ in range(terms)])
 
@@ -173,6 +169,9 @@ class MainWindow(QMainWindow):
         print(f"Algoritmo finalizado con error {error} en {iterations} iteraciones")
         self.plot_index = 0
         self.plot_with_delay()
+
+    def run_regression(self):
+        pass
 
     def plot_with_delay(self):
         if self.plot_index < len(self.plot_solutions):
@@ -225,10 +224,16 @@ class MainWindow(QMainWindow):
         
         x, y = event.xdata, event.ydata
         
-        if event.button == LEFT_CLICK or event.button == RIGHT_CLICK:
-            self.ax.plot(x, y, 'bo')
-            self.canvas.draw()
-            self.data.append([x, y])
+        if event.button == LEFT_CLICK:
+            result = 1
+            self.classification.ax.plot(x, y, 'bo')
+        elif event.button == RIGHT_CLICK:
+            result = 0
+            self.classification.ax.plot(x, y, 'ro')
+        
+        self.classification.canvas.draw()
+
+        self.classification.data.append([x, y, result])
 
     def handle_onclick_regression(self, event):
         if event.inaxes is None or self.is_running:
@@ -237,9 +242,9 @@ class MainWindow(QMainWindow):
         x, y = event.xdata, event.ydata
         
         if event.button == LEFT_CLICK or event.button == RIGHT_CLICK:
-            self.ax.plot(x, y, 'bo')
-            self.canvas.draw()
-            self.data.append([x, y])
+            self.regression.ax.plot(x, y, 'bo')
+            self.regression.canvas.draw()
+            self.regression.data.append([x, y])
 
 
     def draw_classification_chart(self):
@@ -261,7 +266,7 @@ class MainWindow(QMainWindow):
         self.classification.ax.axvline(0, color='black', linewidth=0.8)
 
         # Display the empty plot
-        self.classification.cid = self.classification.figure.canvas.mpl_connect('button_press_event', self.handle_onclick_regression)
+        self.classification.cid = self.classification.figure.canvas.mpl_connect('button_press_event', self.handle_onclick_classification)
         # plt.show()
 
     def draw_regression_chart(self):
