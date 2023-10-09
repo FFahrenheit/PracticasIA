@@ -1,4 +1,4 @@
-# pyside2-uic mainwindow.ui > ui_mainwindow.py
+# C:/Python39/Lib/site-packages/PySide6/uic mainwindow.ui > ui_mainwindow.py -g python
 from PySide6.QtWidgets import QApplication
 from mainwindow import MainWindow
 import sys

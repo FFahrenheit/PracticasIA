@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>702</width>
-    <height>454</height>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -37,6 +37,18 @@
               <string>Datos de entrenamiento</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
+              <item row="10" column="1" colspan="2">
+               <widget class="QPushButton" name="clear_button">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Limpiar</string>
+                </property>
+               </widget>
+              </item>
               <item row="2" column="1">
                <widget class="QLabel" name="label_7">
                 <property name="font">
@@ -49,91 +61,7 @@
                 </property>
                </widget>
               </item>
-              <item row="9" column="1">
-               <widget class="QLabel" name="label_4">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>c</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="1">
-               <widget class="QLabel" name="label_3">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>b</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QLineEdit" name="learning_rate">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>0.02</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
-               <widget class="QLabel" name="label_8">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>MSE</string>
-                </property>
-               </widget>
-              </item>
-              <item row="11" column="1" colspan="2">
-               <widget class="QPushButton" name="clear_button">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Limpiar</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLabel" name="label">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Razón de aprendizaje</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QLabel" name="label_5">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Iteración</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="2">
+              <item row="4" column="2">
                <widget class="QLabel" name="current_error">
                 <property name="font">
                  <font>
@@ -145,7 +73,31 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
+              <item row="3" column="2">
+               <widget class="QLabel" name="iteration_label">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="label_8">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>MSE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
                <widget class="QLabel" name="x2_label">
                 <property name="font">
                  <font>
@@ -169,18 +121,6 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
-               <widget class="QLabel" name="label_2">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>a</string>
-                </property>
-               </widget>
-              </item>
               <item row="2" column="2">
                <widget class="QLineEdit" name="max_iterations">
                 <property name="font">
@@ -193,8 +133,32 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="2">
-               <widget class="QLabel" name="iteration_label">
+              <item row="11" column="1" colspan="2">
+               <widget class="QPushButton" name="begin_button">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Iniciar</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="label_5">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Iteración</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="2">
+               <widget class="QLabel" name="c_label">
                 <property name="font">
                  <font>
                   <pointsize>14</pointsize>
@@ -205,7 +169,7 @@
                 </property>
                </widget>
               </item>
-              <item row="7" column="2">
+              <item row="6" column="2">
                <widget class="QLabel" name="x_label">
                 <property name="font">
                  <font>
@@ -217,15 +181,63 @@
                 </property>
                </widget>
               </item>
-              <item row="9" column="2">
-               <widget class="QLabel" name="c_label">
+              <item row="0" column="1">
+               <widget class="QLabel" name="label">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Razón de aprendizaje</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLineEdit" name="learning_rate">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>0.02</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLabel" name="label_4">
                 <property name="font">
                  <font>
                   <pointsize>14</pointsize>
                  </font>
                 </property>
                 <property name="text">
-                 <string>-</string>
+                 <string>b</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLabel" name="label_3">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>w2</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="label_2">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>w1</string>
                 </property>
                </widget>
               </item>
@@ -238,49 +250,6 @@
                 </property>
                 <property name="text">
                  <string>0.1</string>
-                </property>
-               </widget>
-              </item>
-              <item row="12" column="1" colspan="2">
-               <widget class="QPushButton" name="begin_button">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Iniciar</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QComboBox" name="grade_input">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Lineal</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Cuadrático</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLabel" name="label_9">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Grado</string>
                 </property>
                </widget>
               </item>
@@ -528,6 +497,18 @@
                 </property>
                </widget>
               </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="label_18">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Grado</string>
+                </property>
+               </widget>
+              </item>
               <item row="3" column="2">
                <widget class="QComboBox" name="grade_input_2">
                 <property name="font">
@@ -545,18 +526,6 @@
                   <string>Cuadrático</string>
                  </property>
                 </item>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLabel" name="label_18">
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Grado</string>
-                </property>
                </widget>
               </item>
              </layout>
@@ -580,7 +549,7 @@
      <x>0</x>
      <y>0</y>
      <width>702</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
