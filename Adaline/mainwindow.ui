@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
+    <width>768</width>
     <height>537</height>
    </rect>
   </property>
@@ -28,7 +28,7 @@
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
-           <string>Presione click izquierdo para poner &quot;1&quot; y click derecho para poner &quot;0&quot;</string>
+           <string>Presione click izquierdo para poner &quot;1&quot; y click derecho para poner &quot;-1&quot;</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="1">
@@ -98,7 +98,7 @@
                </widget>
               </item>
               <item row="5" column="2">
-               <widget class="QLabel" name="x2_label">
+               <widget class="QLabel" name="w1_label">
                 <property name="font">
                  <font>
                   <pointsize>14</pointsize>
@@ -158,7 +158,7 @@
                </widget>
               </item>
               <item row="8" column="2">
-               <widget class="QLabel" name="c_label">
+               <widget class="QLabel" name="b_label">
                 <property name="font">
                  <font>
                   <pointsize>14</pointsize>
@@ -170,7 +170,7 @@
                </widget>
               </item>
               <item row="6" column="2">
-               <widget class="QLabel" name="x_label">
+               <widget class="QLabel" name="w2_label">
                 <property name="font">
                  <font>
                   <pointsize>14</pointsize>
@@ -548,7 +548,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>702</width>
+     <width>768</width>
      <height>22</height>
     </rect>
    </property>

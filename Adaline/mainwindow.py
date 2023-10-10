@@ -12,6 +12,7 @@ RIGHT_CLICK = 3
 DELAY = 100
 LINEAR = 0
 QUADRATIC = 1
+CONTOUR_DOTS = 200
 
 class Algorithm:
     def __init__(self):
@@ -19,6 +20,11 @@ class Algorithm:
         self.canvas = FigureCanvas(self.figure)
         self.data = []
         self.is_running = False
+        self.n = None
+        self.max_iterations = None
+        self.target_error = None
+        self.plot_index = 0
+        self.colorbar = None
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -35,8 +41,8 @@ class MainWindow(QMainWindow):
         self.ui.begin_button.clicked.connect(self.start_classification)
         self.ui.clear_button.clicked.connect(self.clear_classification)
 
-        self.ui.begin_button.clicked.connect(self.start_regression)
-        self.ui.clear_button_2.clicked.connect(self.clear_classification)
+        self.ui.begin_button_2.clicked.connect(self.start_regression)
+        self.ui.clear_button_2.clicked.connect(self.clear_regression)
 
         self.draw_classification_chart()
         self.initilize_classification()
@@ -47,18 +53,23 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def clear_classification(self):
-        if self.is_running:
+        if self.classification.is_running:
             return
         
+        if self.classification.colorbar is not None:
+            self.classification.colorbar.remove()
+            self.classification.colorbar = None
+        
         plt.clf()
-        self.draw_chart()
-        self.canvas.draw()
+        self.draw_classification_chart()
+        self.classification.canvas.draw()
         self.ui.iteration_label.setText("-")
-        self.ui.x_label.setText("-")
-        self.ui.x2_label.setText("-")
-        self.ui.c_label.setText("-")
+        self.ui.w1_label.setText("-")
+        self.ui.w2_label.setText("-")
+        self.ui.b_label.setText("-")
         self.ui.current_error.setText("-")
-        self.initilize_algorithm()
+        self.initilize_classification()
+
 
     @Slot()
     def clear_regression(self):
@@ -80,31 +91,30 @@ class MainWindow(QMainWindow):
         if self.is_running:
             return
         
-        if len(self.data) <= 0:
+        if len(self.classification.data) <= 0:
             return self.print_error("Datos insuficientes","No hay suficientes patrones de entrenamiento")
         
-        self.n = str(self.ui.learning_rate.text())
-        self.max_iterations = str(self.ui.max_iterations.text())
-        self.target_error = str(self.ui.target_error.text())
-        self.degree = self.ui.grade_input.currentIndex()
+        n = str(self.ui.learning_rate.text())
+        max_iterations = str(self.ui.max_iterations.text())
+        target_error = str(self.ui.target_error.text())
 
         try:
-            self.n = float(self.n)
-            self.max_iterations = int(self.max_iterations)
-            self.target_error = float(self.target_error)
+            self.classification.n = float(n)
+            self.classification.max_iterations = int(max_iterations)
+            self.classification.target_error = float(target_error)
         except ValueError:
             return self.print_error("Datos erroneos", "Constante de entrenamiento y error objeto deben ser numericos. Iteraciones maximas debe ser entero")
         
-        if self.n <= 0 or self.n >= 1:
+        if self.classification.n <= 0 or self.classification.n >= 1:
             return self.print_error("Datos erroneos", "Constante de entrenamiento debe estar entre 0 y 1")
         
-        if self.max_iterations < 1:
+        if self.classification.max_iterations < 1:
             return self.print_error("Datos erroneos", " Iteraciones maximas deben ser mayores a 0")
         
-        if self.target_error <= 0:
+        if self.classification.target_error <= 0:
             return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
         
-        self.is_running = True
+        self.classification.is_running = True
         self.run_classification()
     
     @Slot()
@@ -140,79 +150,102 @@ class MainWindow(QMainWindow):
         self.run_regression()
 
     def run_classification(self):
-        terms = 2 + self.degree
-        w = np.array([random() for _ in range(terms)])
-
+        w = np.array([random() for _ in range(3)])  # w[0] = b
+                                                    # w[1] = w1
+                                                    # w[2] = w2
         error = 1e10
         iterations = 0
-        self.plot_solutions = []
+        self.classification.plot_solutions = []
 
-        while error > self.target_error and iterations < self.max_iterations:
+        while error > self.classification.target_error and iterations < self.classification.max_iterations:
             error = 0
-            for pattern in self.data:
-                x, y = pattern
+            for pattern in self.classification.data:
+                x1, x2, d = pattern
 
-                v = sum(value*x**(terms - i - 1) for i, value in enumerate(w))
-                e = y - v
+                x = np.array([1.0, x1, x2])             # x[0] = bias
+
+                v = sum([x[i]*w[i] for i in range(len(w))])
+
+                y = self.classification_activation_function(v)
+                e = d - y
                 error += e**2
 
-                w = w + self.n*e*np.array([x**i for i in range(terms - 1, -1, -1)])
+                y_prime = self.classification_activation_derivative(v)
 
-            error /= len(self.data)
+                # print(w, self.classification.n, e, y_prime, x, sep='\t')
+                w = w + self.classification.n*e*y_prime*x
 
-            self.plot_solutions.append({
+            error /= len(self.classification.data)
+
+            self.classification.plot_solutions.append({
                 "solution": w,
                 "error": error
             })
             iterations += 1
         
         print(f"Algoritmo finalizado con error {error} en {iterations} iteraciones")
-        self.plot_index = 0
-        self.plot_with_delay()
+        self.classification.plot_index = 0
+        self.plot_classification_with_delay()
+
+    def classification_activation_function(self, v):
+        return np.tanh(v)
+        # return 1/(1 + np.e**(-v))
+    
+    def classification_activation_derivative(self, v):
+        return (1 - self.classification_activation_function(v))*(1 + self.classification_activation_function(v))
+        # return self.classification_activation_function(v)*(1 - self.classification_activation_function(v))
 
     def run_regression(self):
         pass
 
-    def plot_with_delay(self):
-        if self.plot_index < len(self.plot_solutions):
-            
-            if self.plot_index != 0:
-                self.ax.lines.pop()
-            
-            plot = self.plot_solutions[self.plot_index]
+    def classificate(self, W, X, Y):
+        v = W[0] + W[1]*X + W[2]*Y
+        return self.classification_activation_function(v)
+
+    def plot_classification_with_delay(self):
+
+        if self.classification.plot_index < len(self.classification.plot_solutions):
+
+            plot = self.classification.plot_solutions[self.classification.plot_index]
             w = plot['solution']
+            b, w1, w2 = w
             error = plot['error']
 
-            if self.degree == LINEAR:
-                m, c = w
-                a = 0
-                x = np.array([-10, 10])
-                y = m*x + c
-                self.ui.label_3.setText("m")
-            elif self.degree == QUADRATIC:
-                a, m, c = w
-                x = np.arange(-10, 10, 0.1)
-                y = a*x**2 + m*x + c
-                self.ui.label_3.setText("b")
+            swep = np.linspace(-10, 10, CONTOUR_DOTS)
+            X, Y = np.meshgrid(swep, swep)
+            Z = self.classificate(w, X, Y)
+
+            custom_colors = [ '#fc72e8', '#fd88eb', '#fe9eeb',
+            '#ffadec', '#ffc3ec', '#ffdcec', '#ffe9ec', '#fff2ec',
+            '#fff8ec', '#fffbec', '#ffffff', '#e6e6ff', '#ccd3ff',
+            '#b2baff', '#99c1ff', '#7fb8ff', '#66afff', '#4ca6ff', 
+            '#339dff', '#1994ff', '#007bfa']
+
+            custom_levels = np.linspace(-1, 1, len(custom_colors))
+
+            colorbar = self.classification.ax.contourf(X, Y, Z, levels=custom_levels, colors=custom_colors)
             
+            if self.classification.colorbar is None:
+                self.classification.colorbar = colorbar
+                self.classification.figure.colorbar(colorbar)
+
+            self.classification.canvas.draw()
+
             self.ui.current_error.setText(f"{error:.4g}")
-            self.ui.iteration_label.setText(str(self.plot_index + 1))
-            self.ui.x2_label.setText(f"{a:.4g}")
-            self.ui.x_label.setText(f"{m:.4g}")
-            self.ui.c_label.setText(f"{c:.4g}")
+            self.ui.iteration_label.setText(str(self.classification.plot_index + 1))
+            self.ui.w1_label.setText(f"{w1:.4g}")
+            self.ui.w2_label.setText(f"{w2:.4g}")
+            self.ui.b_label.setText(f"{b:.4g}")
 
-            self.ax.plot(x, y, linestyle='-', color='g')
-            self.canvas.draw()
-
-            self.plot_index += 1
-            QTimer.singleShot(DELAY, self.plot_with_delay)
+            self.classification.plot_index += 1
+            QTimer.singleShot(DELAY, self.plot_classification_with_delay)
         else:
-            self.is_running = False
-            self.plot_solutions = []
+            self.classification.is_running = False
+            self.classification.plot_solutions = []
 
     def initilize_classification(self):
-        self.is_running = False
-        self.data = []
+        self.classification.is_running = False
+        self.classification.data = []
 
     def initilize_regression(self):
         self.is_running = False
@@ -228,7 +261,7 @@ class MainWindow(QMainWindow):
             result = 1
             self.classification.ax.plot(x, y, 'bo')
         elif event.button == RIGHT_CLICK:
-            result = 0
+            result = -1
             self.classification.ax.plot(x, y, 'ro')
         
         self.classification.canvas.draw()
@@ -252,8 +285,8 @@ class MainWindow(QMainWindow):
         self.classification.ax = self.classification.figure.add_subplot(111)
 
         # Set the labels 
-        self.classification.ax.set_xlabel('x')
-        self.classification.ax.set_ylabel('y')
+        self.classification.ax.set_xlabel('x1')
+        self.classification.ax.set_ylabel('x2')
         self.classification.ax.xaxis.set_label_coords(0.95, 0.5)
         self.classification.ax.yaxis.set_label_coords(0.5, 0.95)
 
