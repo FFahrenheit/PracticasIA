@@ -195,7 +195,7 @@ class Ui_MainWindow(object):
         self.begin_button_2.setObjectName(u"begin_button_2")
         self.begin_button_2.setFont(font)
 
-        self.gridLayout_6.addWidget(self.begin_button_2, 11, 1, 1, 2)
+        self.gridLayout_6.addWidget(self.begin_button_2, 10, 1, 1, 2)
 
         self.label_15 = QLabel(self.groupBox_5)
         self.label_15.setObjectName(u"label_15")
@@ -219,13 +219,13 @@ class Ui_MainWindow(object):
         self.b_label_2.setObjectName(u"b_label_2")
         self.b_label_2.setFont(font1)
 
-        self.gridLayout_6.addWidget(self.b_label_2, 8, 2, 1, 1)
+        self.gridLayout_6.addWidget(self.b_label_2, 7, 2, 1, 1)
 
         self.clear_button_2 = QPushButton(self.groupBox_5)
         self.clear_button_2.setObjectName(u"clear_button_2")
         self.clear_button_2.setFont(font)
 
-        self.gridLayout_6.addWidget(self.clear_button_2, 10, 1, 1, 2)
+        self.gridLayout_6.addWidget(self.clear_button_2, 9, 1, 1, 2)
 
         self.label_17 = QLabel(self.groupBox_5)
         self.label_17.setObjectName(u"label_17")
@@ -245,23 +245,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.w1_label_2, 5, 2, 1, 1)
 
-        self.w2_label_2 = QLabel(self.groupBox_5)
-        self.w2_label_2.setObjectName(u"w2_label_2")
-        self.w2_label_2.setFont(font1)
-
-        self.gridLayout_6.addWidget(self.w2_label_2, 6, 2, 1, 1)
-
         self.label_11 = QLabel(self.groupBox_5)
         self.label_11.setObjectName(u"label_11")
         self.label_11.setFont(font1)
 
-        self.gridLayout_6.addWidget(self.label_11, 8, 1, 1, 1)
-
-        self.label_12 = QLabel(self.groupBox_5)
-        self.label_12.setObjectName(u"label_12")
-        self.label_12.setFont(font1)
-
-        self.gridLayout_6.addWidget(self.label_12, 6, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.label_11, 7, 1, 1, 1)
 
         self.label_16 = QLabel(self.groupBox_5)
         self.label_16.setObjectName(u"label_16")
@@ -355,11 +343,9 @@ class Ui_MainWindow(object):
         self.label_17.setText(QCoreApplication.translate("MainWindow", u"w1", None))
         self.max_iterations_2.setText(QCoreApplication.translate("MainWindow", u"50", None))
         self.w1_label_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.w2_label_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"b", None))
-        self.label_12.setText(QCoreApplication.translate("MainWindow", u"w2", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
-        self.learning_rate_2.setText(QCoreApplication.translate("MainWindow", u"0.2", None))
+        self.learning_rate_2.setText(QCoreApplication.translate("MainWindow", u"0.02", None))
         self.target_error_2.setText(QCoreApplication.translate("MainWindow", u"0.1", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Iteraciones m\u00e1ximas", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Regresi\u00f3n", None))

@@ -22,7 +22,9 @@ class Algorithm:
         self.max_iterations = None
         self.target_error = None
         self.plot_index = 0
+        self.plot_solutions = []
         self.colorbar = None
+        self.last_line = None
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -43,10 +45,10 @@ class MainWindow(QMainWindow):
         self.ui.clear_button_2.clicked.connect(self.clear_regression)
 
         self.draw_classification_chart()
-        self.initilize_classification()
+        self.initialize_classification()
 
         self.draw_regression_chart()
-        self.initilize_regression()
+        self.initialize_regression()
 
     def initialize_classification(self):
         self.classification.is_running = False
@@ -77,22 +79,21 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def clear_regression(self):
-        if self.is_running:
+        if self.regression.is_running:
             return
         
         plt.clf()
-        self.draw_chart()
-        self.classification.canvas.draw()
+        self.draw_regression_chart()
+        self.regression.canvas.draw()
         self.ui.iteration_label_2.setText("-")
         self.ui.w1_label_2.setText("-")
-        self.ui.w2_label_2.setText("-")
         self.ui.b_label_2.setText("-")
         self.ui.current_error_2.setText("-")
-        self.initialize_classification()
+        self.initialize_regression()
 
     @Slot()
     def start_classification(self):
-        if self.is_running:
+        if self.classification.is_running:
             return
         
         if len(self.classification.data) <= 0:
@@ -123,34 +124,33 @@ class MainWindow(QMainWindow):
     
     @Slot()
     def start_regression(self):
-        if self.is_running:
+        if self.regression.is_running:
             return
         
-        if len(self.data) <= 0:
+        if len(self.regression.data) <= 0:
             return self.print_error("Datos insuficientes","No hay suficientes patrones de entrenamiento")
         
-        self.n = str(self.ui.learning_rate.text())
-        self.max_iterations = str(self.ui.max_iterations.text())
-        self.target_error = str(self.ui.target_error.text())
-        self.degree = self.ui.grade_input.currentIndex()
+        n = str(self.ui.learning_rate_2.text())
+        max_iterations = str(self.ui.max_iterations_2.text())
+        target_error = str(self.ui.target_error_2.text())
 
         try:
-            self.n = float(self.n)
-            self.max_iterations = int(self.max_iterations)
-            self.target_error = float(self.target_error)
+            self.regression.n = float(n)
+            self.regression.max_iterations = int(max_iterations)
+            self.regression.target_error = float(target_error)
         except ValueError:
             return self.print_error("Datos erroneos", "Constante de entrenamiento y error objeto deben ser numericos. Iteraciones maximas debe ser entero")
         
-        if self.n <= 0 or self.n >= 1:
+        if self.regression.n <= 0 or self.regression.n >= 1:
             return self.print_error("Datos erroneos", "Constante de entrenamiento debe estar entre 0 y 1")
         
-        if self.max_iterations < 1:
+        if self.regression.max_iterations < 1:
             return self.print_error("Datos erroneos", " Iteraciones maximas deben ser mayores a 0")
         
-        if self.target_error <= 0:
+        if self.regression.target_error <= 0:
             return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
         
-        self.is_running = True
+        self.regression.is_running = True
         self.run_regression()
 
     def run_classification(self):
@@ -199,57 +199,121 @@ class MainWindow(QMainWindow):
         return (1 - self.classification_activation_function(v))*(1 + self.classification_activation_function(v))
         # return self.classification_activation_function(v)*(1 - self.classification_activation_function(v))
 
-    def run_regression(self):
-        pass
-
     def classificate(self, W, X, Y):
         v = W[0] + W[1]*X + W[2]*Y
         return self.classification_activation_function(v)
 
+    def run_regression(self):
+        w = np.array([random() for _ in range(2)])  # w[0] = b
+                                                    # w[1] = w1
+        error = 1e10
+        iterations = 0
+        self.regression.plot_solutions = []
+
+        while error > self.regression.target_error and iterations < self.regression.max_iterations:
+            error = 0
+            for pattern in self.regression.data:
+                xd, yd = pattern
+
+                x = np.array([1.0, xd])             # x[0] = bias
+
+                v = np.sum(x*w)
+
+                y = self.regression_activation_function(v)
+                e = yd - y
+                error += e**2
+
+                y_prime = 1
+
+                # print(w, self.regression.n, e, y_prime, x, sep='\t')
+                w = w + self.regression.n*e*y_prime*x
+
+            error /= len(self.regression.data)
+
+            self.regression.plot_solutions.append({
+                "solution": w,
+                "error": error
+            })
+            iterations += 1
+        
+        print(f"Algoritmo finalizado con error {error} en {iterations} iteraciones")
+        self.regression.plot_index = 0
+        self.plot_regression_with_delay()
+
+    def regression_activation_function(self, v):
+        return v
+
     def plot_classification_with_delay(self):
-
-        if self.classification.plot_index < len(self.classification.plot_solutions):
-
-            plot = self.classification.plot_solutions[self.classification.plot_index]
-            w = plot['solution']
-            b, w1, w2 = w
-            error = plot['error']
-
-            swep = np.linspace(-10, 10, CONTOUR_DOTS)
-            X, Y = np.meshgrid(swep, swep)
-            Z = self.classificate(w, X, Y)
-
-            custom_colors = [ '#fc72e8', '#fd88eb', '#fe9eeb',
-            '#ffadec', '#ffc3ec', '#ffdcec', '#ffe9ec', '#fff2ec',
-            '#fff8ec', '#fffbec', '#ffffff', '#e6e6ff', '#ccd3ff',
-            '#b2baff', '#99c1ff', '#7fb8ff', '#66afff', '#4ca6ff', 
-            '#339dff', '#1994ff', '#007bfa']
-
-            custom_levels = np.linspace(-1, 1, len(custom_colors))
-
-            colorbar = self.classification.ax.contourf(X, Y, Z, levels=custom_levels, colors=custom_colors)
-            
-            if self.classification.colorbar is None:
-                self.classification.colorbar = colorbar
-                self.classification.figure.colorbar(colorbar)
-
-            self.classification.canvas.draw()
-
-            self.ui.current_error.setText(f"{error:.4g}")
-            self.ui.iteration_label.setText(str(self.classification.plot_index + 1))
-            self.ui.w1_label.setText(f"{w1:.4g}")
-            self.ui.w2_label.setText(f"{w2:.4g}")
-            self.ui.b_label.setText(f"{b:.4g}")
-
-            self.classification.plot_index += 1
-            QTimer.singleShot(DELAY, self.plot_classification_with_delay)
-        else:
+        if self.classification.plot_index >= len(self.classification.plot_solutions):
             self.classification.is_running = False
             self.classification.plot_solutions = []
+            return
+        
+        plot = self.classification.plot_solutions[self.classification.plot_index]
+        w = plot['solution']
+        b, w1, w2 = w
+        error = plot['error']
 
+        swep = np.linspace(-10, 10, CONTOUR_DOTS)
+        X, Y = np.meshgrid(swep, swep)
+        Z = self.classificate(w, X, Y)
+
+        custom_colors = [ '#fc72e8', '#fd88eb', '#fe9eeb',
+        '#ffadec', '#ffc3ec', '#ffdcec', '#ffe9ec', '#fff2ec',
+        '#fff8ec', '#fffbec', '#ffffff', '#e6e6ff', '#ccd3ff',
+        '#b2baff', '#99c1ff', '#7fb8ff', '#66afff', '#4ca6ff', 
+        '#339dff', '#1994ff', '#007bfa']
+
+        custom_levels = np.linspace(-1, 1, len(custom_colors))
+
+        colorbar = self.classification.ax.contourf(X, Y, Z, levels=custom_levels, colors=custom_colors)
+        
+        if self.classification.colorbar is None:
+            self.classification.colorbar = colorbar
+            self.classification.figure.colorbar(colorbar)
+
+        self.classification.canvas.draw()
+
+        self.ui.current_error.setText(f"{error:.4g}")
+        self.ui.iteration_label.setText(str(self.classification.plot_index + 1))
+        self.ui.w1_label.setText(f"{w1:.4g}")
+        self.ui.w2_label.setText(f"{w2:.4g}")
+        self.ui.b_label.setText(f"{b:.4g}")
+
+        self.classification.plot_index += 1
+        QTimer.singleShot(DELAY, self.plot_classification_with_delay)
+
+    def plot_regression_with_delay(self):
+
+        if self.regression.plot_index >= len(self.regression.plot_solutions):
+            self.regression.is_running = False
+            self.regression.plot_solutions = []
+            return
+        
+        plot = self.regression.plot_solutions[self.regression.plot_index]
+        w = plot['solution']
+        error = plot['error']
+
+        if self.regression.plot_index != 0 and self.regression.last_line is not None:
+            self.regression.ax.lines[-1].remove()
+
+        c, m = w
+        x = np.array([-10, 10])
+        y = m*x + c
+        
+        self.regression.last_line = self.regression.ax.plot(x, y, linestyle='-', color='r')
+        self.regression.canvas.draw()
+
+        self.ui.current_error_2.setText(f"{error:.4g}")
+        self.ui.iteration_label_2.setText(str(self.regression.plot_index + 1))
+        self.ui.w1_label_2.setText(f"{m:.4g}")
+        self.ui.b_label_2.setText(f"{c:.4g}")
+
+        self.regression.plot_index += 1
+        QTimer.singleShot(DELAY, self.plot_regression_with_delay)
 
     def handle_onclick_classification(self, event):
-        if event.inaxes is None or self.is_running:
+        if event.inaxes is None or self.classification.is_running:
             return
         
         x, y = event.xdata, event.ydata
@@ -266,7 +330,7 @@ class MainWindow(QMainWindow):
         self.classification.data.append([x, y, result])
 
     def handle_onclick_regression(self, event):
-        if event.inaxes is None or self.is_running:
+        if event.inaxes is None or self.regression.is_running:
             return
         
         x, y = event.xdata, event.ydata
