@@ -10,8 +10,6 @@ import numpy as np
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
 DELAY = 100
-LINEAR = 0
-QUADRATIC = 1
 CONTOUR_DOTS = 200
 
 class Algorithm:
@@ -50,6 +48,13 @@ class MainWindow(QMainWindow):
         self.draw_regression_chart()
         self.initilize_regression()
 
+    def initialize_classification(self):
+        self.classification.is_running = False
+        self.classification.data = []
+
+    def initialize_regression(self):
+        self.regression.is_running = False
+        self.regression.data = []
 
     @Slot()
     def clear_classification(self):
@@ -68,8 +73,7 @@ class MainWindow(QMainWindow):
         self.ui.w2_label.setText("-")
         self.ui.b_label.setText("-")
         self.ui.current_error.setText("-")
-        self.initilize_classification()
-
+        self.initialize_classification()
 
     @Slot()
     def clear_regression(self):
@@ -78,13 +82,13 @@ class MainWindow(QMainWindow):
         
         plt.clf()
         self.draw_chart()
-        self.canvas.draw()
-        self.ui.iteration_label.setText("-")
-        self.ui.x_label.setText("-")
-        self.ui.x2_label.setText("-")
-        self.ui.c_label.setText("-")
-        self.ui.current_error.setText("-")
-        self.initilize_algorithm()
+        self.classification.canvas.draw()
+        self.ui.iteration_label_2.setText("-")
+        self.ui.w1_label_2.setText("-")
+        self.ui.w2_label_2.setText("-")
+        self.ui.b_label_2.setText("-")
+        self.ui.current_error_2.setText("-")
+        self.initialize_classification()
 
     @Slot()
     def start_classification(self):
@@ -164,7 +168,7 @@ class MainWindow(QMainWindow):
 
                 x = np.array([1.0, x1, x2])             # x[0] = bias
 
-                v = sum([x[i]*w[i] for i in range(len(w))])
+                v = np.sum(x*w)
 
                 y = self.classification_activation_function(v)
                 e = d - y
@@ -243,13 +247,6 @@ class MainWindow(QMainWindow):
             self.classification.is_running = False
             self.classification.plot_solutions = []
 
-    def initilize_classification(self):
-        self.classification.is_running = False
-        self.classification.data = []
-
-    def initilize_regression(self):
-        self.is_running = False
-        self.data = []
 
     def handle_onclick_classification(self, event):
         if event.inaxes is None or self.is_running:
@@ -300,7 +297,6 @@ class MainWindow(QMainWindow):
 
         # Display the empty plot
         self.classification.cid = self.classification.figure.canvas.mpl_connect('button_press_event', self.handle_onclick_classification)
-        # plt.show()
 
     def draw_regression_chart(self):
         # Access the Matplotlib axes
@@ -322,7 +318,6 @@ class MainWindow(QMainWindow):
 
         # Display the empty plot
         self.regression.cid = self.regression.figure.canvas.mpl_connect('button_press_event', self.handle_onclick_regression)
-        # plt.show()
 
     def print_error(self, title, message):
         QMessageBox.critical(self, title, message)
