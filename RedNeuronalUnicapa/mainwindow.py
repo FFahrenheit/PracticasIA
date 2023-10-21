@@ -11,6 +11,7 @@ LEFT_CLICK = 1
 RIGHT_CLICK = 3
 DELAY = 100
 CONTOUR_DOTS = 100
+APROX_MODE = 0
 
 CLASS_QTY = 5
 CLASS_COLORS = [
@@ -32,7 +33,6 @@ CLUSTER_COLORS = [
     '#e0965e',
     '#e05e5e',
     '#db4242'
-    
 ]
 SELECT_STYLE = "color:white; text-decoration: underline; font-weight: bold;"
 UNSELECT_STYLE = "color:white; text-decoration: none; font-weight: normal;"
@@ -109,6 +109,7 @@ class MainWindow(QMainWindow):
         n = str(self.ui.learning_rate.text())
         max_iterations = str(self.ui.max_iterations.text())
         target_error = str(self.ui.target_error.text())
+        self.mode = self.ui.selector_mode.currentIndex()
 
         try:
             self.n = float(n)
@@ -167,12 +168,12 @@ class MainWindow(QMainWindow):
     def plot_with_delay(self):
         if self.plot_index == self.max_trainning:
             self.is_running = False
-            self.data.clear()
+            self.plot_solutions.clear()
             return
         
         Ws = []
+        mmse = 0
         for i, solutions in enumerate(self.plot_solutions):
-            self.ui.iteration_label.setText(str(self.plot_index + 1))
 
             if len(solutions) <= self.plot_index:
                 plot = solutions[-1]
@@ -183,11 +184,15 @@ class MainWindow(QMainWindow):
             Ws.append(w)
             b, w1, w2 = w
             error = plot['error']
+            mmse += error
 
             self.ui.result_table.item(i, 0).setText(f"{error:.4g}")
             self.ui.result_table.item(i, 1).setText(f"{w1:.4g}")
             self.ui.result_table.item(i, 2).setText(f"{w2:.4g}")
             self.ui.result_table.item(i, 3).setText(f"{b:.4g}")
+
+        self.ui.iteration_label.setText(str(self.plot_index + 1))
+        self.ui.mmse_label.setText(f"{mmse:.4g}")
 
         swep = np.linspace(-10, 10, CONTOUR_DOTS)
         X, Y = np.meshgrid(swep, swep)
@@ -210,8 +215,8 @@ class MainWindow(QMainWindow):
                     current_out = Z[i, j]
                     if current_out > max_out:
                         max_out = current_out
-                        selected_class = index + 1
-                Z[i, j] = selected_class if True else selected_class*max_out
+                        selected_class = index
+                Z[i, j] = selected_class + max_out if self.mode == APROX_MODE else selected_class + 1
 
         custom_colors = CLUSTER_COLORS
         custom_levels = np.linspace(0, 5, len(custom_colors))
