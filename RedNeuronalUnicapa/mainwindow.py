@@ -4,6 +4,7 @@ from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+import matplotlib.ticker as mticker
 import numpy as np
 from adaline import AdalineNeuron
 
@@ -22,17 +23,26 @@ CLASS_COLORS = [
     '#DC0000'
 ]
 CLUSTER_COLORS = [
+    '#f2d6ff',
     '#e5b6fc',
     '#d278ff',
+
     '#7a90ff',
     '#7adcff',
+    '#63d6ff',
+    
     '#72d4c7',
-    '#72d483',
-    '#cded74',
+    '#72d477',
+    '#53cf55',
+    
+    '#b2ed85',
+    '#f2ef91',
     '#edd374',
+
     '#e0965e',
     '#e05e5e',
-    '#db4242'
+    '#db4242',
+    '#db4242',
 ]
 SELECT_STYLE = "color:white; text-decoration: underline; font-weight: bold;"
 UNSELECT_STYLE = "color:white; text-decoration: none; font-weight: normal;"
@@ -190,7 +200,8 @@ class MainWindow(QMainWindow):
             self.ui.result_table.item(i, 1).setText(f"{w1:.4g}")
             self.ui.result_table.item(i, 2).setText(f"{w2:.4g}")
             self.ui.result_table.item(i, 3).setText(f"{b:.4g}")
-
+        
+        mmse /= len(self.plot_solutions)
         self.ui.iteration_label.setText(str(self.plot_index + 1))
         self.ui.mmse_label.setText(f"{mmse:.4g}")
 
@@ -206,7 +217,8 @@ class MainWindow(QMainWindow):
         for W in Ws:
             Z = self.classificate(W, X, Y)
             Zs.append(Z)
-
+        
+        Zout = np.empty((CONTOUR_DOTS, CONTOUR_DOTS))
         for i in range(CONTOUR_DOTS):
             for j in range(CONTOUR_DOTS):
                 max_out = -1
@@ -216,16 +228,18 @@ class MainWindow(QMainWindow):
                     if current_out > max_out:
                         max_out = current_out
                         selected_class = index
-                Z[i, j] = selected_class + max_out if self.mode == APROX_MODE else selected_class + 1
+                Zout[i, j] = selected_class + max_out if self.mode == APROX_MODE else selected_class + 1
 
         custom_colors = CLUSTER_COLORS
         custom_levels = np.linspace(0, 5, len(custom_colors))
 
-        colorbar = self.ax.contourf(X, Y, Z, levels=custom_levels, colors=custom_colors)
+        colorbar = self.ax.contourf(X, Y, Zout, levels=custom_levels, colors=custom_colors)
 
         if self.colorbar is None:
             self.colorbar = colorbar
-            self.figure.colorbar(colorbar)
+            cbar = self.figure.colorbar(colorbar)
+            cbar.ax.set_yticks([0, 1, 2, 3, 4, 5])
+            cbar.ax.set_yticklabels(['0', '1','2','3','4','5'])
         
         self.canvas.draw()
 

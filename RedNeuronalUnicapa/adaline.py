@@ -52,5 +52,3 @@ class AdalineNeuron:
     def activation_derivative(self, v):
         # return (1 - self.activation_function(v))*(1 + self.activation_function(v))
         return self.activation_function(v)*(1 - self.activation_function(v))
-
-
