@@ -4,13 +4,14 @@ from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-from random import random
 import numpy as np
+from adaline import AdalineNeuron
 
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
 DELAY = 100
 
+CLASS_QTY = 5
 CLASS_COLORS = [
     '#AA00FF',
     '#00BBFF',
@@ -18,6 +19,8 @@ CLASS_COLORS = [
     '#E3B200',
     '#DC0000'
 ]
+SELECT_STYLE = "color:white; text-decoration: underline; font-weight: bold;"
+UNSELECT_STYLE = "color:white; text-decoration: none; font-weight: normal;"
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -44,7 +47,6 @@ class MainWindow(QMainWindow):
         self.ui.class4.clicked.connect(lambda: self.set_current_class(3))
         self.ui.class5.clicked.connect(lambda: self.set_current_class(4))
 
-
         self.draw_chart()
         self.initilize_algorithm()
 
@@ -58,11 +60,12 @@ class MainWindow(QMainWindow):
     def set_current_class(self, selected_class:int):
         print(f"Clase seleccionada: {selected_class}")
         if self.selected_class is not None:
-            self.class_buttons[self.selected_class].setStyleSheet(f"color:white; background-color: {CLASS_COLORS[self.selected_class]}; text-decoration: none; font-weight: normal;")
+            self.class_buttons[self.selected_class].setStyleSheet(f"background-color: {CLASS_COLORS[self.selected_class]}; {UNSELECT_STYLE}")
+        self.selected_class = selected_class
+        self.class_buttons[self.selected_class].setStyleSheet(f"background-color: {CLASS_COLORS[selected_class]}; {SELECT_STYLE}")
+
         self.ui.current_class.setStyleSheet(f"color: {CLASS_COLORS[selected_class]}; font-weight: bold;")
         self.ui.current_class.setText(f"Clase {selected_class + 1}")
-        self.selected_class = selected_class
-        self.class_buttons[self.selected_class].setStyleSheet(f"color:white; background-color: {CLASS_COLORS[selected_class]}; text-decoration: underline; font-weight: bold;")
 
     @Slot()
     def clear_all(self):
@@ -87,15 +90,14 @@ class MainWindow(QMainWindow):
         if len(self.data) <= 0:
             return self.print_error("Datos insuficientes","No hay suficientes patrones de entrenamiento")
         
-        self.n = str(self.ui.learning_rate.text())
-        self.max_iterations = str(self.ui.max_iterations.text())
-        self.target_error = str(self.ui.target_error.text())
-        self.degree = self.ui.grade_input.currentIndex()
+        n = str(self.ui.learning_rate.text())
+        max_iterations = str(self.ui.max_iterations.text())
+        target_error = str(self.ui.target_error.text())
 
         try:
-            self.n = float(self.n)
-            self.max_iterations = int(self.max_iterations)
-            self.target_error = float(self.target_error)
+            self.n = float(n)
+            self.max_iterations = int(max_iterations)
+            self.target_error = float(target_error)
         except ValueError:
             return self.print_error("Datos erroneos", "Constante de entrenamiento y error objeto deben ser numericos. Iteraciones maximas debe ser entero")
         
@@ -112,73 +114,45 @@ class MainWindow(QMainWindow):
         self.run_algorithm()
 
     def run_algorithm(self):
-        terms = 2 + self.degree
-        w = np.array([random() for _ in range(terms)])
-
-        error = 1e10
-        iterations = 0
+        self.neurons = []
         self.plot_solutions = []
+        self.max_trainning = 0
 
-        while error > self.target_error and iterations < self.max_iterations:
-            error = 0
-            for pattern in self.data:
-                x, y = pattern
+        for i in range(CLASS_QTY):
+            neuron = AdalineNeuron(
+                w_quantity=3,
+                expected_output=i+1
+            )
+            self.neurons.append(neuron)
 
-                v = sum(value*x**(terms - i - 1) for i, value in enumerate(w))
-                e = y - v
-                error += e**2
+            solutions = neuron.train(
+                self.data,
+                self.target_error,
+                self.max_iterations,
+                self.n
+            )
+            self.plot_solutions.append(solutions)
 
-                w = w + self.n*e*np.array([x**i for i in range(terms - 1, -1, -1)])
-
-            error /= len(self.data)
-
-            self.plot_solutions.append({
-                "solution": w,
-                "error": error
-            })
-            iterations += 1
+            if len(solutions) > self.max_trainning:
+                self.max_trainning = len(solutions)
         
-        print(f"Algoritmo finalizado con error {error} en {iterations} iteraciones")
         self.plot_index = 0
         self.plot_with_delay()
 
+
+    def classificate(self, W, X, Y):
+        v = W[0] + W[1]*X + W[2]*Y
+        return self.classification_activation_function(v)
+    
+
     def plot_with_delay(self):
-        if self.plot_index < len(self.plot_solutions):
-            
-            if self.plot_index != 0 and self.last_line is not None:
-                self.ax.lines[-1].remove()
-                # self.ax.lines.pop()
-            
-            plot = self.plot_solutions[self.plot_index]
-            w = plot['solution']
-            error = plot['error']
-
-            if self.degree == LINEAR:
-                m, c = w
-                a = 0
-                x = np.array([-10, 10])
-                y = m*x + c
-                self.ui.label_3.setText("m")
-            elif self.degree == QUADRATIC:
-                a, m, c = w
-                x = np.arange(-10, 10, 0.1)
-                y = a*x**2 + m*x + c
-                self.ui.label_3.setText("b")
-            
-            self.ui.current_error.setText(f"{error:.4g}")
-            self.ui.iteration_label.setText(str(self.plot_index + 1))
-            self.ui.x2_label.setText(f"{a:.4g}")
-            self.ui.x_label.setText(f"{m:.4g}")
-            self.ui.c_label.setText(f"{c:.4g}")
-
-            self.last_line = self.ax.plot(x, y, linestyle='-', color='g')
-            self.canvas.draw()
-
-            self.plot_index += 1
-            QTimer.singleShot(DELAY, self.plot_with_delay)
-        else:
+        if self.plot_index == len(self.plot_solutions):
             self.is_running = False
-            self.plot_solutions = []
+            self.data.clear()
+            return
+
+
+        QTimer.singleShot(DELAY, self.plot_with_delay)
 
     def initilize_algorithm(self):
         self.is_running = False
@@ -190,6 +164,7 @@ class MainWindow(QMainWindow):
         
         if self.selected_class is None:
             self.print_error('Sin clase seleccionada', 'Seleccione una clase haciendo click en el botón o presionando una tecla')
+            return
         
         x, y = event.xdata, event.ydata
         
