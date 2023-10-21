@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from PySide6.QtCore import Slot, QTimer
+from PySide6.QtCore import Slot, QTimer, Qt
 from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -10,8 +10,14 @@ import numpy as np
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
 DELAY = 100
-LINEAR = 0
-QUADRATIC = 1
+
+CLASS_COLORS = [
+    '#AA00FF',
+    '#00BBFF',
+    '#00BE20',
+    '#E3B200',
+    '#DC0000'
+]
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,8 +32,37 @@ class MainWindow(QMainWindow):
         self.ui.begin_button.clicked.connect(self.start_algorithm)
         self.ui.clear_button.clicked.connect(self.clear_all)
 
+        self.selected_class = None
+
+        self.class_buttons = [
+            self.ui.class1, self.ui.class2, self.ui.class3,
+            self.ui.class4, self.ui.class5    
+        ]
+        self.ui.class1.clicked.connect(lambda: self.set_current_class(0))
+        self.ui.class2.clicked.connect(lambda: self.set_current_class(1))
+        self.ui.class3.clicked.connect(lambda: self.set_current_class(2))
+        self.ui.class4.clicked.connect(lambda: self.set_current_class(3))
+        self.ui.class5.clicked.connect(lambda: self.set_current_class(4))
+
+
         self.draw_chart()
         self.initilize_algorithm()
+
+    def keyPressEvent(self, event):
+        pressed_key = event.key()
+        if pressed_key >= Qt.Key.Key_1 and pressed_key <= Qt.Key.Key_5:
+            self.set_current_class(pressed_key - Qt.Key.Key_1)
+        return super().keyPressEvent(event)
+    
+    @Slot()
+    def set_current_class(self, selected_class:int):
+        print(f"Clase seleccionada: {selected_class}")
+        if self.selected_class is not None:
+            self.class_buttons[self.selected_class].setStyleSheet(f"color:white; background-color: {CLASS_COLORS[self.selected_class]}; text-decoration: none; font-weight: normal;")
+        self.ui.current_class.setStyleSheet(f"color: {CLASS_COLORS[selected_class]}; font-weight: bold;")
+        self.ui.current_class.setText(f"Clase {selected_class + 1}")
+        self.selected_class = selected_class
+        self.class_buttons[self.selected_class].setStyleSheet(f"color:white; background-color: {CLASS_COLORS[selected_class]}; text-decoration: underline; font-weight: bold;")
 
     @Slot()
     def clear_all(self):
@@ -153,12 +188,15 @@ class MainWindow(QMainWindow):
         if event.inaxes is None or self.is_running:
             return
         
+        if self.selected_class is None:
+            self.print_error('Sin clase seleccionada', 'Seleccione una clase haciendo click en el botón o presionando una tecla')
+        
         x, y = event.xdata, event.ydata
         
         if event.button == LEFT_CLICK or event.button == RIGHT_CLICK:
-            self.ax.plot(x, y, 'bo')
+            self.ax.plot(x, y, 'o', color=CLASS_COLORS[self.selected_class])
             self.canvas.draw()
-            self.data.append([x, y])
+            self.data.append([x, y, self.selected_class + 1])
 
 
     def draw_chart(self):
@@ -166,8 +204,8 @@ class MainWindow(QMainWindow):
         self.ax = self.figure.add_subplot(111)
 
         # Set the labels 
-        self.ax.set_xlabel('x')
-        self.ax.set_ylabel('y')
+        self.ax.set_xlabel('x1')
+        self.ax.set_ylabel('x2')
         self.ax.xaxis.set_label_coords(0.95, 0.5)
         self.ax.yaxis.set_label_coords(0.5, 0.95)
 

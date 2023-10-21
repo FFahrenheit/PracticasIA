@@ -39,57 +39,56 @@ class Ui_MainWindow(object):
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton_3 = QPushButton(self.groupBox_4)
-        self.pushButton_3.setObjectName(u"pushButton_3")
-        self.pushButton_3.setMaximumSize(QSize(60, 80))
+        self.class1 = QPushButton(self.groupBox_4)
+        self.class1.setObjectName(u"class1")
+        self.class1.setMaximumSize(QSize(60, 80))
         font = QFont()
         font.setPointSize(14)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setStyleSheet(u"background-color: rgb(170, 0, 255);\n"
+        self.class1.setFont(font)
+        self.class1.setStyleSheet(u"background-color: rgb(170, 0, 255);\n"
 "color: white;\n"
 "")
 
-        self.horizontalLayout.addWidget(self.pushButton_3)
+        self.horizontalLayout.addWidget(self.class1)
 
-        self.pushButton_2 = QPushButton(self.groupBox_4)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setMaximumSize(QSize(60, 80))
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet(u"background-color: rgb(0, 187, 255);\n"
+        self.class2 = QPushButton(self.groupBox_4)
+        self.class2.setObjectName(u"class2")
+        self.class2.setMaximumSize(QSize(60, 80))
+        self.class2.setFont(font)
+        self.class2.setStyleSheet(u"background-color: rgb(0, 187, 255);\n"
+"color: white;\n"
+"box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);")
+
+        self.horizontalLayout.addWidget(self.class2)
+
+        self.class3 = QPushButton(self.groupBox_4)
+        self.class3.setObjectName(u"class3")
+        self.class3.setMaximumSize(QSize(60, 80))
+        self.class3.setFont(font)
+        self.class3.setStyleSheet(u"background-color: rgb(0, 190, 32);\n"
+"color: white;")
+
+        self.horizontalLayout.addWidget(self.class3)
+
+        self.class4 = QPushButton(self.groupBox_4)
+        self.class4.setObjectName(u"class4")
+        self.class4.setMaximumSize(QSize(60, 80))
+        self.class4.setFont(font)
+        self.class4.setStyleSheet(u"background-color:rgb(227, 178, 0);\n"
+"color: white;\n"
+"opacity: 1;")
+
+        self.horizontalLayout.addWidget(self.class4)
+
+        self.class5 = QPushButton(self.groupBox_4)
+        self.class5.setObjectName(u"class5")
+        self.class5.setMaximumSize(QSize(60, 80))
+        self.class5.setFont(font)
+        self.class5.setStyleSheet(u"background-color: rgb(220, 0, 0);\n"
 "color: white;\n"
 "")
 
-        self.horizontalLayout.addWidget(self.pushButton_2)
-
-        self.pushButton_5 = QPushButton(self.groupBox_4)
-        self.pushButton_5.setObjectName(u"pushButton_5")
-        self.pushButton_5.setMaximumSize(QSize(60, 80))
-        self.pushButton_5.setFont(font)
-        self.pushButton_5.setStyleSheet(u"background-color: rgb(0, 190, 32);\n"
-"color: white;\n"
-"")
-
-        self.horizontalLayout.addWidget(self.pushButton_5)
-
-        self.pushButton_4 = QPushButton(self.groupBox_4)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        self.pushButton_4.setMaximumSize(QSize(60, 80))
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setStyleSheet(u"background-color:rgb(227, 178, 0);\n"
-"color: white;\n"
-"")
-
-        self.horizontalLayout.addWidget(self.pushButton_4)
-
-        self.pushButton = QPushButton(self.groupBox_4)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setMaximumSize(QSize(60, 80))
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet(u"background-color: rgb(220, 0, 0);\n"
-"color: white;\n"
-"")
-
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout.addWidget(self.class5)
 
 
         self.gridLayout_3.addLayout(self.horizontalLayout, 4, 1, 1, 2)
@@ -210,12 +209,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.learning_rate, 0, 2, 1, 1)
 
-        self.label_10 = QLabel(self.groupBox_4)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setFont(font1)
-        self.label_10.setAlignment(Qt.AlignCenter)
+        self.current_class = QLabel(self.groupBox_4)
+        self.current_class.setObjectName(u"current_class")
+        self.current_class.setFont(font1)
+        self.current_class.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout_3.addWidget(self.label_10, 3, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.current_class, 3, 2, 1, 1)
 
 
         self.gridLayout.addWidget(self.groupBox_4, 0, 1, 1, 1)
@@ -246,11 +245,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Seleccione una clase y haga click en el plano para ingresar un patr\u00f3n de entrenamiento", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Datos de entrenamiento", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"1", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"2", None))
-        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"3", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"4", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"5", None))
+        self.class1.setText(QCoreApplication.translate("MainWindow", u"1", None))
+        self.class2.setText(QCoreApplication.translate("MainWindow", u"2", None))
+        self.class3.setText(QCoreApplication.translate("MainWindow", u"3", None))
+        self.class4.setText(QCoreApplication.translate("MainWindow", u"4", None))
+        self.class5.setText(QCoreApplication.translate("MainWindow", u"5", None))
         self.x2_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
         self.target_error.setText(QCoreApplication.translate("MainWindow", u"0.1", None))
@@ -270,6 +269,6 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"a", None))
         self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
         self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.02", None))
-        self.label_10.setText(QCoreApplication.translate("MainWindow", u"Seleccione una clase", None))
+        self.current_class.setText(QCoreApplication.translate("MainWindow", u"Seleccione una clase", None))
     # retranslateUi
 
