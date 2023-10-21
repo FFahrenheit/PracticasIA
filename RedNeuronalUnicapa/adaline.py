@@ -36,6 +36,7 @@ class AdalineNeuron:
             error /= len(self.data)
 
             self.plot_solution.append({
+                "expected": self.expected_output,
                 "solution": w,
                 "error": error
             })
