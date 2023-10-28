@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>767</width>
-    <height>585</height>
+    <width>1044</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>Seleccione una clase y haga click en el plano para ingresar un patrón de entrenamiento</string>
+       <string>Haga click izquierdo para colocar un (1) y derecho para un (0)</string>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
@@ -42,7 +42,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
+          <item row="4" column="2">
            <widget class="QLabel" name="iteration_label">
             <property name="font">
              <font>
@@ -54,7 +54,7 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="1" colspan="2">
+          <item row="9" column="1" colspan="2">
            <widget class="QPushButton" name="begin_button">
             <property name="font">
              <font>
@@ -66,7 +66,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2">
+          <item row="5" column="1" colspan="2">
            <widget class="QTableWidget" name="result_table">
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -103,12 +103,7 @@
             </row>
             <row>
              <property name="text">
-              <string>N4</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>N5</string>
+              <string>N4 (O)</string>
              </property>
             </row>
             <column>
@@ -206,26 +201,6 @@
               <string/>
              </property>
             </item>
-            <item row="4" column="0">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item row="4" column="1">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item row="4" column="2">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item row="4" column="3">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="2" column="2">
@@ -236,7 +211,7 @@
              </font>
             </property>
             <property name="text">
-             <string>200</string>
+             <string>100</string>
             </property>
            </widget>
           </item>
@@ -284,11 +259,11 @@
              </font>
             </property>
             <property name="text">
-             <string>Iteraciones máximas</string>
+             <string>Épocas máximas</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="1" colspan="2">
+          <item row="8" column="1" colspan="2">
            <widget class="QPushButton" name="clear_button">
             <property name="font">
              <font>
@@ -300,7 +275,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QLabel" name="label_5">
             <property name="font">
              <font>
@@ -308,8 +283,54 @@
              </font>
             </property>
             <property name="text">
-             <string>Iteración</string>
+             <string>Época</string>
             </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Neuronas capa oculta</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="n_neurons">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -325,7 +346,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>767</width>
+     <width>1044</width>
      <height>22</height>
     </rect>
    </property>

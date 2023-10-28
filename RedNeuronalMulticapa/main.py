@@ -8,7 +8,7 @@ if __name__ == '__main__':
     app = QApplication()
     # Crear ventana
     window = MainWindow()
-    window.setWindowTitle("Red Neuronal Multicapa - Clasificador binario")
+    window.setWindowTitle("Red Neuronal Multicapa - Algoritmo de retropropagación")
     # Se hace visible
     window.show()
     # Qt loop
