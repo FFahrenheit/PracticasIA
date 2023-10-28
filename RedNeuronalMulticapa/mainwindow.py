@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem, QFileDialog
 from PySide6.QtCore import Slot, QTimer
 from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -11,11 +11,14 @@ RIGHT_CLICK = 3
 DELAY = 100
 CONTOUR_DOTS = 100
 
-CUSTOM_COLORS = [ '#fc72e8', '#fd88eb', '#fe9eeb',
+CUSTOM_COLORS = [ '#fc72e8', '#fc72e8', '#fd88eb', '#fe9eeb',
 '#ffadec', '#ffc3ec', '#ffdcec', '#ffe9ec', '#fff2ec',
-'#fff8ec', '#fffbec', '#ffffff', '#e6e6ff', '#ccd3ff',
+'#fff8ec', 
+# '#fffbec', '#ffffff', '#e6e6ff', 
+'#ffffff',
+'#ccd3ff',
 '#b2baff', '#99c1ff', '#7fb8ff', '#66afff', '#4ca6ff', 
-'#339dff', '#1994ff', '#007bfa' ]
+'#339dff', '#1994ff', '#007bfa', '#007bfa' ]
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -30,9 +33,60 @@ class MainWindow(QMainWindow):
         self.ui.begin_button.clicked.connect(self.start_algorithm)
         self.ui.clear_button.clicked.connect(self.clear_all)
 
+        self.ui.actionAbrir_dataset.triggered.connect(self.load_dataset)
+        self.ui.actionGuardar_dataset.triggered.connect(self.save_dataset)
+
         self.draw_chart()
         self.initilize_algorithm()
-        self.initialize_cells()
+        self.ui.result_table.clear()
+
+    @Slot()
+    def save_dataset(self,):
+        if len(self.data) == 0:
+            self.print_error("No hay suficientes datos", "Agregue mas patrones de entrenamiento")
+            return
+
+        path = QFileDialog.getSaveFileName(
+            self,
+            'Guardar dataset',
+            './datasets',
+            'CSV (*.csv)'
+        )[0]
+
+        try:
+            np.savetxt(path, self.data, delimiter=',', fmt='%f')
+        except Exception as e:
+            self.print_error("No se pudo guardar el dataset", str(e))
+
+    @Slot()
+    def load_dataset(self):
+        path = QFileDialog.getOpenFileName(
+            self,
+            "Abrir dataset",
+            "./datasets",
+            "CSV Files (*.csv);;All Files (*)"
+        )[0]
+        
+        self.clear_all()
+        try:
+            with open(path, 'r') as dataset:
+                data = dataset.read()
+                for line in data.split('\n'):
+                    if line.strip() == '':
+                        break
+                    x, y, result = line.split(',')
+                    x = float(x); y = float(y); result = int(float(result))
+                
+                    if result == 1:
+                        self.ax.plot(x, y, 'bo')
+                    elif result == -1:
+                        self.ax.plot(x, y, 'ro')
+                    self.data.append([x, y, result])    
+            
+            self.canvas.draw()
+        except Exception as e:
+            self.print_error("No se pudo cargar el dataset", str(e))
+    
 
     @Slot()
     def clear_all(self):
@@ -46,8 +100,8 @@ class MainWindow(QMainWindow):
         if self.colorbar is not None:
             self.colorbar.remove()
             self.colorbar = None
-        self.initialize_cells()
         self.initilize_algorithm()
+        self.ui.result_table.clear()
 
     @Slot()
     def start_algorithm(self):
@@ -149,7 +203,7 @@ class MainWindow(QMainWindow):
                 }
             })
 
-        print(f"Entrenamiento finalizaod en {epochs} épocas con error {error}")
+        print(f"Entrenamiento finalizado en {epochs} épocas con error {error}")
         self.plot_with_delay()
 
     def activation_function(self, v):
@@ -190,7 +244,7 @@ class MainWindow(QMainWindow):
 
         custom_colors = CUSTOM_COLORS
         custom_levels = np.linspace(-1, 1, len(custom_colors))
-
+        
         colorbar = self.ax.contourf(X, Y, Z, levels=custom_levels, colors=custom_colors)
 
         if self.colorbar is None:
@@ -242,12 +296,6 @@ class MainWindow(QMainWindow):
 
         self.cid = self.figure.canvas.mpl_connect('button_press_event', self.handle_onclick)
         self.colorbar = None
-
-    def initialize_cells(self):
-        for i in range(self.ui.result_table.rowCount()):
-            for j in range(self.ui.result_table.columnCount()):
-                item = QTableWidgetItem("")
-                self.ui.result_table.setItem(i, j, item)
 
     def print_error(self, title, message):
         QMessageBox.critical(self, title, message)

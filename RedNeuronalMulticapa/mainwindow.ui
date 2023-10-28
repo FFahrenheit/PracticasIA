@@ -38,7 +38,7 @@
              </font>
             </property>
             <property name="text">
-             <string>0.02</string>
+             <string>0.005</string>
             </property>
            </widget>
           </item>
@@ -211,7 +211,7 @@
              </font>
             </property>
             <property name="text">
-             <string>100</string>
+             <string>150</string>
             </property>
            </widget>
           </item>
@@ -350,8 +350,26 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuGuardar_dataset">
+    <property name="title">
+     <string>Dataset</string>
+    </property>
+    <addaction name="actionGuardar_dataset"/>
+    <addaction name="actionAbrir_dataset"/>
+   </widget>
+   <addaction name="menuGuardar_dataset"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGuardar_dataset">
+   <property name="text">
+    <string>Guardar dataset</string>
+   </property>
+  </action>
+  <action name="actionAbrir_dataset">
+   <property name="text">
+    <string>Abrir dataset</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

@@ -11,21 +11,26 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QComboBox, QGridLayout,
     QGroupBox, QHeaderView, QLabel, QLineEdit,
-    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+    QMainWindow, QMenu, QMenuBar, QPushButton,
+    QSizePolicy, QStatusBar, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1044, 606)
+        self.actionGuardar_dataset = QAction(MainWindow)
+        self.actionGuardar_dataset.setObjectName(u"actionGuardar_dataset")
+        self.actionAbrir_dataset = QAction(MainWindow)
+        self.actionAbrir_dataset.setObjectName(u"actionAbrir_dataset")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -195,10 +200,16 @@ class Ui_MainWindow(object):
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1044, 22))
+        self.menuGuardar_dataset = QMenu(self.menubar)
+        self.menuGuardar_dataset.setObjectName(u"menuGuardar_dataset")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuGuardar_dataset.menuAction())
+        self.menuGuardar_dataset.addAction(self.actionGuardar_dataset)
+        self.menuGuardar_dataset.addAction(self.actionAbrir_dataset)
 
         self.retranslateUi(MainWindow)
 
@@ -207,9 +218,11 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.actionGuardar_dataset.setText(QCoreApplication.translate("MainWindow", u"Guardar dataset", None))
+        self.actionAbrir_dataset.setText(QCoreApplication.translate("MainWindow", u"Abrir dataset", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Haga click izquierdo para colocar un (1) y derecho para un (0)", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Datos de entrenamiento", None))
-        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.02", None))
+        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.005", None))
         self.iteration_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
         ___qtablewidgetitem = self.result_table.horizontalHeaderItem(0)
@@ -233,7 +246,7 @@ class Ui_MainWindow(object):
         self.result_table.setSortingEnabled(False)
         self.result_table.setSortingEnabled(__sortingEnabled)
 
-        self.max_iterations.setText(QCoreApplication.translate("MainWindow", u"100", None))
+        self.max_iterations.setText(QCoreApplication.translate("MainWindow", u"150", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Raz\u00f3n de aprendizaje", None))
         self.target_error.setText(QCoreApplication.translate("MainWindow", u"0.08", None))
@@ -247,5 +260,6 @@ class Ui_MainWindow(object):
         self.n_neurons.setItemText(3, QCoreApplication.translate("MainWindow", u"6", None))
         self.n_neurons.setItemText(4, QCoreApplication.translate("MainWindow", u"7", None))
 
+        self.menuGuardar_dataset.setTitle(QCoreApplication.translate("MainWindow", u"Dataset", None))
     # retranslateUi
 
