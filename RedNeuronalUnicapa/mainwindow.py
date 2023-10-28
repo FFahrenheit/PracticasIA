@@ -4,7 +4,6 @@ from ui_mainwindow import Ui_MainWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-import matplotlib.ticker as mticker
 import numpy as np
 from adaline import AdalineNeuron
 
