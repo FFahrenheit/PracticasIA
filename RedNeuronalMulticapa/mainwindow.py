@@ -5,6 +5,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import numpy as np
+import gc
 
 LEFT_CLICK = 1
 RIGHT_CLICK = 3
@@ -13,10 +14,7 @@ CONTOUR_DOTS = 100
 
 CUSTOM_COLORS = [ '#fc72e8', '#fc72e8', '#fd88eb', '#fe9eeb',
 '#ffadec', '#ffc3ec', '#ffdcec', '#ffe9ec', '#fff2ec',
-'#fff8ec', 
-# '#fffbec', '#ffffff', '#e6e6ff', 
-'#ffffff',
-'#ccd3ff',
+'#fff8ec',  '#ffffff', '#ccd3ff',
 '#b2baff', '#99c1ff', '#7fb8ff', '#66afff', '#4ca6ff', 
 '#339dff', '#1994ff', '#007bfa', '#007bfa' ]
 
@@ -38,7 +36,6 @@ class MainWindow(QMainWindow):
 
         self.draw_chart()
         self.initilize_algorithm()
-        self.ui.result_table.clear()
 
     @Slot()
     def save_dataset(self,):
@@ -132,6 +129,7 @@ class MainWindow(QMainWindow):
         if self.target_error <= 0:
             return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
         
+        self.init_table()
         self.ui.n_neurons.setEnabled(False)
         self.is_running = True
         self.run_algorithm()
@@ -228,6 +226,7 @@ class MainWindow(QMainWindow):
         return output_layer_output.reshape(X.shape)
 
     def plot_with_delay(self):
+        gc.collect()
         if self.plot_index >= len(self.plot_solutions):
             self.is_running = False
             self.ui.n_neurons.setEnabled(True)
@@ -238,9 +237,21 @@ class MainWindow(QMainWindow):
         solution = plot['solution']
         error = plot['error']
 
+        self.ui.iteration_label.setText(str(self.plot_index + 1))
+        self.ui.error_label.setText(f"{error:.4g}")
+        
         swep = np.linspace(-10, 10, CONTOUR_DOTS)
         X, Y = np.meshgrid(swep, swep)
         Z = self.classificate(solution, X, Y)
+
+        for i in range(self.n + 1):
+            if i == self.n:
+                self.ui.result_table.item(i, 2).setText(f"{solution['wo'][0,0]:.4g}")
+            else:
+                self.ui.result_table.item(i, 0).setText(f"{solution['wh'][i,0]:.4g}")
+                self.ui.result_table.item(i, 1).setText(f"{solution['wh'][i,1]:.4g}")
+                self.ui.result_table.item(i, 2).setText(f"{solution['bh'][i,0]:.4g}")
+                self.ui.result_table.item(i, 3).setText(f"{solution['wo'][0,i]:.4g}")
 
         custom_colors = CUSTOM_COLORS
         custom_levels = np.linspace(-1, 1, len(custom_colors))
@@ -279,6 +290,20 @@ class MainWindow(QMainWindow):
         self.canvas.draw()
         self.data.append([x, y, result])
 
+    def init_table(self):
+        self.ui.result_table.clear()
+        for i, header in enumerate(['w1', 'w2', 'b', 'wnO']):
+            self.ui.result_table.setHorizontalHeaderItem(i, QTableWidgetItem(header))
+
+        self.ui.result_table.setRowCount(self.n + 1)     
+        for i in range(1, self.n + 2):
+            item = QTableWidgetItem(f"N{i}") if i != (self.n + 1) else QTableWidgetItem("NO")
+            self.ui.result_table.setVerticalHeaderItem(i-1, item)
+
+        for i in range(self.ui.result_table.rowCount()):
+            for j in range(self.ui.result_table.columnCount()):
+                item = QTableWidgetItem("")
+                self.ui.result_table.setItem(i, j, item)
 
     def draw_chart(self):
         self.ax = self.figure.add_subplot(111)

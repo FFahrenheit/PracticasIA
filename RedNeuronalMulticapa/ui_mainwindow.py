@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1044, 606)
+        MainWindow.resize(1044, 644)
         self.actionGuardar_dataset = QAction(MainWindow)
         self.actionGuardar_dataset.setObjectName(u"actionGuardar_dataset")
         self.actionAbrir_dataset = QAction(MainWindow)
@@ -48,27 +48,25 @@ class Ui_MainWindow(object):
         self.groupBox_4.setObjectName(u"groupBox_4")
         self.gridLayout_3 = QGridLayout(self.groupBox_4)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.learning_rate = QLineEdit(self.groupBox_4)
-        self.learning_rate.setObjectName(u"learning_rate")
+        self.max_iterations = QLineEdit(self.groupBox_4)
+        self.max_iterations.setObjectName(u"max_iterations")
         font = QFont()
         font.setPointSize(12)
-        self.learning_rate.setFont(font)
+        self.max_iterations.setFont(font)
 
-        self.gridLayout_3.addWidget(self.learning_rate, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.max_iterations, 2, 2, 1, 1)
 
-        self.iteration_label = QLabel(self.groupBox_4)
-        self.iteration_label.setObjectName(u"iteration_label")
-        font1 = QFont()
-        font1.setPointSize(14)
-        self.iteration_label.setFont(font1)
+        self.clear_button = QPushButton(self.groupBox_4)
+        self.clear_button.setObjectName(u"clear_button")
+        self.clear_button.setFont(font)
 
-        self.gridLayout_3.addWidget(self.iteration_label, 4, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.clear_button, 9, 1, 1, 2)
 
-        self.begin_button = QPushButton(self.groupBox_4)
-        self.begin_button.setObjectName(u"begin_button")
-        self.begin_button.setFont(font)
+        self.label_6 = QLabel(self.groupBox_4)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font)
 
-        self.gridLayout_3.addWidget(self.begin_button, 9, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.label_6, 1, 1, 1, 1)
 
         self.result_table = QTableWidget(self.groupBox_4)
         if (self.result_table.columnCount() < 4):
@@ -96,31 +94,23 @@ class Ui_MainWindow(object):
         __qtablewidgetitem9 = QTableWidgetItem()
         self.result_table.setItem(0, 1, __qtablewidgetitem9)
         __qtablewidgetitem10 = QTableWidgetItem()
-        self.result_table.setItem(0, 2, __qtablewidgetitem10)
+        self.result_table.setItem(1, 0, __qtablewidgetitem10)
         __qtablewidgetitem11 = QTableWidgetItem()
-        self.result_table.setItem(1, 0, __qtablewidgetitem11)
+        self.result_table.setItem(1, 1, __qtablewidgetitem11)
         __qtablewidgetitem12 = QTableWidgetItem()
-        self.result_table.setItem(1, 1, __qtablewidgetitem12)
+        self.result_table.setItem(1, 2, __qtablewidgetitem12)
         __qtablewidgetitem13 = QTableWidgetItem()
-        self.result_table.setItem(1, 2, __qtablewidgetitem13)
+        self.result_table.setItem(2, 0, __qtablewidgetitem13)
         __qtablewidgetitem14 = QTableWidgetItem()
-        self.result_table.setItem(1, 3, __qtablewidgetitem14)
+        self.result_table.setItem(2, 1, __qtablewidgetitem14)
         __qtablewidgetitem15 = QTableWidgetItem()
-        self.result_table.setItem(2, 0, __qtablewidgetitem15)
+        self.result_table.setItem(2, 2, __qtablewidgetitem15)
         __qtablewidgetitem16 = QTableWidgetItem()
-        self.result_table.setItem(2, 1, __qtablewidgetitem16)
+        self.result_table.setItem(3, 0, __qtablewidgetitem16)
         __qtablewidgetitem17 = QTableWidgetItem()
-        self.result_table.setItem(2, 2, __qtablewidgetitem17)
+        self.result_table.setItem(3, 1, __qtablewidgetitem17)
         __qtablewidgetitem18 = QTableWidgetItem()
-        self.result_table.setItem(2, 3, __qtablewidgetitem18)
-        __qtablewidgetitem19 = QTableWidgetItem()
-        self.result_table.setItem(3, 0, __qtablewidgetitem19)
-        __qtablewidgetitem20 = QTableWidgetItem()
-        self.result_table.setItem(3, 1, __qtablewidgetitem20)
-        __qtablewidgetitem21 = QTableWidgetItem()
-        self.result_table.setItem(3, 2, __qtablewidgetitem21)
-        __qtablewidgetitem22 = QTableWidgetItem()
-        self.result_table.setItem(3, 3, __qtablewidgetitem22)
+        self.result_table.setItem(3, 2, __qtablewidgetitem18)
         self.result_table.setObjectName(u"result_table")
         self.result_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.result_table.setShowGrid(True)
@@ -129,55 +119,33 @@ class Ui_MainWindow(object):
         self.result_table.horizontalHeader().setCascadingSectionResizes(False)
         self.result_table.horizontalHeader().setDefaultSectionSize(75)
 
-        self.gridLayout_3.addWidget(self.result_table, 5, 1, 1, 2)
-
-        self.max_iterations = QLineEdit(self.groupBox_4)
-        self.max_iterations.setObjectName(u"max_iterations")
-        self.max_iterations.setFont(font)
-
-        self.gridLayout_3.addWidget(self.max_iterations, 2, 2, 1, 1)
-
-        self.label_6 = QLabel(self.groupBox_4)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setFont(font)
-
-        self.gridLayout_3.addWidget(self.label_6, 1, 1, 1, 1)
-
-        self.label = QLabel(self.groupBox_4)
-        self.label.setObjectName(u"label")
-        self.label.setFont(font)
-
-        self.gridLayout_3.addWidget(self.label, 0, 1, 1, 1)
-
-        self.target_error = QLineEdit(self.groupBox_4)
-        self.target_error.setObjectName(u"target_error")
-        self.target_error.setFont(font)
-
-        self.gridLayout_3.addWidget(self.target_error, 1, 2, 1, 1)
-
-        self.label_7 = QLabel(self.groupBox_4)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setFont(font)
-
-        self.gridLayout_3.addWidget(self.label_7, 2, 1, 1, 1)
-
-        self.clear_button = QPushButton(self.groupBox_4)
-        self.clear_button.setObjectName(u"clear_button")
-        self.clear_button.setFont(font)
-
-        self.gridLayout_3.addWidget(self.clear_button, 8, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.result_table, 6, 1, 1, 2)
 
         self.label_5 = QLabel(self.groupBox_4)
         self.label_5.setObjectName(u"label_5")
+        font1 = QFont()
+        font1.setPointSize(14)
         self.label_5.setFont(font1)
 
         self.gridLayout_3.addWidget(self.label_5, 4, 1, 1, 1)
+
+        self.learning_rate = QLineEdit(self.groupBox_4)
+        self.learning_rate.setObjectName(u"learning_rate")
+        self.learning_rate.setFont(font)
+
+        self.gridLayout_3.addWidget(self.learning_rate, 0, 2, 1, 1)
 
         self.label_2 = QLabel(self.groupBox_4)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setFont(font)
 
         self.gridLayout_3.addWidget(self.label_2, 3, 1, 1, 1)
+
+        self.target_error = QLineEdit(self.groupBox_4)
+        self.target_error.setObjectName(u"target_error")
+        self.target_error.setFont(font)
+
+        self.gridLayout_3.addWidget(self.target_error, 1, 2, 1, 1)
 
         self.n_neurons = QComboBox(self.groupBox_4)
         self.n_neurons.addItem("")
@@ -189,6 +157,42 @@ class Ui_MainWindow(object):
         self.n_neurons.setFont(font1)
 
         self.gridLayout_3.addWidget(self.n_neurons, 3, 2, 1, 1)
+
+        self.label_7 = QLabel(self.groupBox_4)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font)
+
+        self.gridLayout_3.addWidget(self.label_7, 2, 1, 1, 1)
+
+        self.iteration_label = QLabel(self.groupBox_4)
+        self.iteration_label.setObjectName(u"iteration_label")
+        self.iteration_label.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.iteration_label, 4, 2, 1, 1)
+
+        self.begin_button = QPushButton(self.groupBox_4)
+        self.begin_button.setObjectName(u"begin_button")
+        self.begin_button.setFont(font)
+
+        self.gridLayout_3.addWidget(self.begin_button, 10, 1, 1, 2)
+
+        self.label = QLabel(self.groupBox_4)
+        self.label.setObjectName(u"label")
+        self.label.setFont(font)
+
+        self.gridLayout_3.addWidget(self.label, 0, 1, 1, 1)
+
+        self.label_3 = QLabel(self.groupBox_4)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.label_3, 5, 1, 1, 1)
+
+        self.error_label = QLabel(self.groupBox_4)
+        self.error_label.setObjectName(u"error_label")
+        self.error_label.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.error_label, 5, 2, 1, 1)
 
 
         self.gridLayout.addWidget(self.groupBox_4, 0, 1, 1, 1)
@@ -222,17 +226,17 @@ class Ui_MainWindow(object):
         self.actionAbrir_dataset.setText(QCoreApplication.translate("MainWindow", u"Abrir dataset", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Haga click izquierdo para colocar un (1) y derecho para un (0)", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Datos de entrenamiento", None))
-        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.005", None))
-        self.iteration_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
+        self.max_iterations.setText(QCoreApplication.translate("MainWindow", u"150", None))
+        self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
         ___qtablewidgetitem = self.result_table.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"MSE", None));
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"w1", None));
         ___qtablewidgetitem1 = self.result_table.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"w1", None));
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"w2", None));
         ___qtablewidgetitem2 = self.result_table.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"w2", None));
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"b", None));
         ___qtablewidgetitem3 = self.result_table.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"b", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"wno", None));
         ___qtablewidgetitem4 = self.result_table.verticalHeaderItem(0)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"N1", None));
         ___qtablewidgetitem5 = self.result_table.verticalHeaderItem(1)
@@ -240,26 +244,28 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6 = self.result_table.verticalHeaderItem(2)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"N3", None));
         ___qtablewidgetitem7 = self.result_table.verticalHeaderItem(3)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"N4 (O)", None));
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"NO", None));
 
         __sortingEnabled = self.result_table.isSortingEnabled()
         self.result_table.setSortingEnabled(False)
         self.result_table.setSortingEnabled(__sortingEnabled)
 
-        self.max_iterations.setText(QCoreApplication.translate("MainWindow", u"150", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Raz\u00f3n de aprendizaje", None))
-        self.target_error.setText(QCoreApplication.translate("MainWindow", u"0.08", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u00c9pocas m\u00e1ximas", None))
-        self.clear_button.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u00c9poca", None))
+        self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.005", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Neuronas capa oculta", None))
+        self.target_error.setText(QCoreApplication.translate("MainWindow", u"0.08", None))
         self.n_neurons.setItemText(0, QCoreApplication.translate("MainWindow", u"3", None))
         self.n_neurons.setItemText(1, QCoreApplication.translate("MainWindow", u"4", None))
         self.n_neurons.setItemText(2, QCoreApplication.translate("MainWindow", u"5", None))
         self.n_neurons.setItemText(3, QCoreApplication.translate("MainWindow", u"6", None))
         self.n_neurons.setItemText(4, QCoreApplication.translate("MainWindow", u"7", None))
 
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u00c9pocas m\u00e1ximas", None))
+        self.iteration_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Raz\u00f3n de aprendizaje", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"MSE", None))
+        self.error_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.menuGuardar_dataset.setTitle(QCoreApplication.translate("MainWindow", u"Dataset", None))
     # retranslateUi
 

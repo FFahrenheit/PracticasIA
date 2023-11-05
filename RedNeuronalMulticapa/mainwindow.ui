@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1044</width>
-    <height>606</height>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,43 +30,43 @@
           <string>Datos de entrenamiento</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="learning_rate">
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="max_iterations">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>0.005</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="iteration_label">
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>-</string>
+             <string>150</string>
             </property>
            </widget>
           </item>
           <item row="9" column="1" colspan="2">
-           <widget class="QPushButton" name="begin_button">
+           <widget class="QPushButton" name="clear_button">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Iniciar</string>
+             <string>Limpiar</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="1" colspan="2">
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Error objetivo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="2">
            <widget class="QTableWidget" name="result_table">
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -103,14 +103,9 @@
             </row>
             <row>
              <property name="text">
-              <string>N4 (O)</string>
+              <string>NO</string>
              </property>
             </row>
-            <column>
-             <property name="text">
-              <string>MSE</string>
-             </property>
-            </column>
             <column>
              <property name="text">
               <string>w1</string>
@@ -126,17 +121,17 @@
               <string>b</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string>wno</string>
+             </property>
+            </column>
             <item row="0" column="0">
              <property name="text">
               <string/>
              </property>
             </item>
             <item row="0" column="1">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item row="0" column="2">
              <property name="text">
               <string/>
              </property>
@@ -156,11 +151,6 @@
               <string/>
              </property>
             </item>
-            <item row="1" column="3">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
             <item row="2" column="0">
              <property name="text">
               <string/>
@@ -172,11 +162,6 @@
              </property>
             </item>
             <item row="2" column="2">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-            <item row="2" column="3">
              <property name="text">
               <string/>
              </property>
@@ -196,83 +181,6 @@
               <string/>
              </property>
             </item>
-            <item row="3" column="3">
-             <property name="text">
-              <string/>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLineEdit" name="max_iterations">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>150</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_6">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Error objetivo</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Razón de aprendizaje</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="target_error">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>0.08</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_7">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Épocas máximas</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1" colspan="2">
-           <widget class="QPushButton" name="clear_button">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Limpiar</string>
-            </property>
            </widget>
           </item>
           <item row="4" column="1">
@@ -287,6 +195,18 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="learning_rate">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.005</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="1">
            <widget class="QLabel" name="label_2">
             <property name="font">
@@ -296,6 +216,18 @@
             </property>
             <property name="text">
              <string>Neuronas capa oculta</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="target_error">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.08</string>
             </property>
            </widget>
           </item>
@@ -331,6 +263,78 @@
               <string>7</string>
              </property>
             </item>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_7">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Épocas máximas</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="iteration_label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1" colspan="2">
+           <widget class="QPushButton" name="begin_button">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Iniciar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Razón de aprendizaje</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_3">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>MSE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QLabel" name="error_label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
            </widget>
           </item>
          </layout>
