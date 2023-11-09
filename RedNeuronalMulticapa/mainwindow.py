@@ -72,25 +72,27 @@ class MainWindow(QMainWindow):
                     if line.strip() == '':
                         break
                     x, y, result = line.split(',')
-                    x = float(x); y = float(y); result = int(float(result))
+                    x = float(x); y = float(y); 
+                    result = int(float(result))
                 
                     if result == 1:
                         self.ax.plot(x, y, 'bo')
                     elif result == -1:
                         self.ax.plot(x, y, 'ro')
-                    self.data.append([x, y, result])    
+
+                    self.data.append([x, y, result])
+                self.canvas.draw()                    
             
-            self.canvas.draw()
         except Exception as e:
             self.print_error("No se pudo cargar el dataset", str(e))
     
-
     @Slot()
     def clear_all(self):
         if self.is_running:
             return
         
         plt.clf()
+        self.figure.delaxes(self.ax)
         self.draw_chart()
         self.canvas.draw()
         self.ui.iteration_label.setText("-")
@@ -136,7 +138,6 @@ class MainWindow(QMainWindow):
 
     def run_algorithm(self):
         self.plot_solutions = []
-        self.plot_index = 0
         error = 1e10
         epochs = 0
 
@@ -170,11 +171,13 @@ class MainWindow(QMainWindow):
             # Salida de la capa de salida, podría ser otra función de activación
             output_layer_output = self.activation_function(output_layer_input)
 
-            # Cálculo del error cuadrático medio
-            error = np.mean((output_layer_output - Y.T)**2)
+            # Cálculo del error cuadrático medio de la neurona de salida
+            error = np.mean((Y.T - output_layer_output)**2)
 
             """Etapa hacia atrás"""
             # Cálculo del gradiente local en la capa de salida
+            # d(k) = e(k)*f'(v(k))
+            # d_output = (Y.T - output_layer_output)*self.activation_function_derivative(output_layer_input)
             d_output = 2*(output_layer_output - Y.T)
             # Cálculo del gradiente local en la capa oculta
             # Producto punto de los pesos por el error de la capa siguiente (salida) * derivada de la fn de activación
@@ -193,6 +196,7 @@ class MainWindow(QMainWindow):
             epochs += 1
             self.plot_solutions.append({
                 "error": error,
+                "epoch": epochs,
                 "solution": {
                     "wh": hidden_layer_weights,
                     "bh": hidden_layer_bias,
@@ -201,6 +205,8 @@ class MainWindow(QMainWindow):
                 }
             })
 
+        if self.ui.just_output.isChecked():
+            self.plot_solutions = [ self.plot_solutions[-1] ] 
         print(f"Entrenamiento finalizado en {epochs} épocas con error {error}")
         self.plot_with_delay()
 
@@ -227,17 +233,18 @@ class MainWindow(QMainWindow):
 
     def plot_with_delay(self):
         gc.collect()
-        if self.plot_index >= len(self.plot_solutions):
+        if len(self.plot_solutions) == 0:
             self.is_running = False
             self.ui.n_neurons.setEnabled(True)
             self.plot_solutions.clear()
             return
         
-        plot = self.plot_solutions[self.plot_index]
+        plot = self.plot_solutions.pop(0)
         solution = plot['solution']
         error = plot['error']
+        epoch = plot['epoch']
 
-        self.ui.iteration_label.setText(str(self.plot_index + 1))
+        self.ui.iteration_label.setText(str(epoch))
         self.ui.error_label.setText(f"{error:.4g}")
         
         swep = np.linspace(-10, 10, CONTOUR_DOTS)
@@ -263,9 +270,6 @@ class MainWindow(QMainWindow):
             self.figure.colorbar(colorbar)
 
         self.canvas.draw()
-
-
-        self.plot_index += 1
         QTimer.singleShot(DELAY, self.plot_with_delay)
 
     def initilize_algorithm(self):
