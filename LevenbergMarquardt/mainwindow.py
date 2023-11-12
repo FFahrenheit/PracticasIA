@@ -110,19 +110,21 @@ class MainWindow(QMainWindow):
         if len(self.data) <= 0:
             return self.print_error("Datos insuficientes","No hay suficientes patrones de entrenamiento")
         
-        u = str(self.ui.learning_rate.text())
+        learning_rate = str(self.ui.learning_rate.text())
         max_iterations = str(self.ui.max_iterations.text())
         target_error = str(self.ui.target_error.text())
+        mu = str(self.ui.mu.text())
         self.n = self.ui.n_neurons.currentIndex() + 3
 
         try:
-            self.u = float(u)
+            self.learning_rate = float(learning_rate)
+            self.mu = float(mu)
             self.max_iterations = int(max_iterations)
             self.target_error = float(target_error)
         except ValueError:
             return self.print_error("Datos erroneos", "Constante de entrenamiento y error objeto deben ser numericos. Iteraciones maximas debe ser entero")
         
-        if self.u <= 0 or self.u >= 1:
+        if self.learning_rate <= 0 or self.learning_rate >= 1:
             return self.print_error("Datos erroneos", "Constante de entrenamiento debe estar entre 0 y 1")
         
         if self.max_iterations < 1:
@@ -130,6 +132,9 @@ class MainWindow(QMainWindow):
         
         if self.target_error <= 0:
             return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
+        
+        if self.mu <= 0 or self.mu >= 1:
+            return self.print_error("Datos erroneos", "Mu debe estar entre 0.01 y 0.1")
         
         self.init_table()
         self.ui.n_neurons.setEnabled(False)
@@ -140,73 +145,104 @@ class MainWindow(QMainWindow):
         self.plot_solutions = []
         error = 1e10
         epochs = 0
+        input_size = 2
+        output_size = 1
 
-        # Capa de entrada, tamaño 2 (x, y)
-        # input_layer = np.random.randn(2, 1)
+        np.random.seed(0)
+        # Pesos capa oculta (2 entradas * n neuronas) y bias (1 * n neuronas)
+        w_input_hidden = np.random.rand(input_size, self.n)
+        b_hidden = np.random.rand(1, self.n)
+        # Pesos de entrada capa salida, o salida de capa oculta (n neuronas * 1 salida) y bias (1 * 1)
+        w_hidden_output = np.random.rand(self.n, output_size)
+        b_output = np.random.rand(1, output_size)
 
-        # Pesos de la capa oculta, neuronas_oculta * inputs
-        hidden_layer_weights = np.random.randn(self.n, 2)
-        # Pesos del bias de la capa oculta, neuronas_oculta * 1
-        hidden_layer_bias = np.random.randn(self.n, 1)
-        # Pesos de la capa de salida, 1 * neurona_oculta
-        output_layer_weights = np.random.randn(1, self.n)
-        # Pesos del bias de la capa oculta, 1 * 1
-        output_layer_bias = np.random.randn(1, 1)        
+        X = np.array([pattern[:input_size] for pattern in self.data])
+        Y = np.array([pattern[-output_size:] for pattern in self.data])
 
-        # Entradas del patrón de entrenamiento
-        X = np.array([pattern[:2] for pattern in self.data])
-        # Salidas del patrón de entrenamiento 
-        Y = np.array([pattern[-1] for pattern in self.data])
+        # Cantidad de patrones y pesos para Jacobiana
+        n_samples = len(self.data)
+        n_weights = self.n*(input_size + 1) + output_size*(self.n + 1)
 
         while error > self.target_error and epochs < self.max_iterations:
-            """Etapa hacia adelante"""
-            # Entradas en la capa de entrada (producto punto entradas)
-            # El bias siempre será 1, por eso se suma aparte
-            hidden_layer_input = np.dot(hidden_layer_weights, X.T) + hidden_layer_bias
-            # Salida de la capa oculta
+            """ Etapa hacia adelante """
+            hidden_layer_input = np.dot(X, w_input_hidden) + b_hidden
             hidden_layer_output = self.activation_function(hidden_layer_input)
-            # Entradas de la capa de salida 
-            # Producto punto de sus pesos * salida de la anterior + bias
-            output_layer_input = np.dot(output_layer_weights, hidden_layer_output) + output_layer_bias
-            # Salida de la capa de salida, podría ser otra función de activación
+            output_layer_input = np.dot(hidden_layer_output, w_hidden_output) + b_output
             output_layer_output = self.activation_function(output_layer_input)
 
             # Cálculo del error cuadrático medio de la neurona de salida
-            error = np.mean((Y.T - output_layer_output)**2)
+            error = np.mean((Y - output_layer_output)**2)
 
-            """Etapa hacia atrás"""
-            # Cálculo del gradiente local en la capa de salida
-            # d(k) = e(k)*f'(v(k))
-            # d_output = (Y.T - output_layer_output)*self.activation_function_derivative(output_layer_input)
-            d_output = 2*(output_layer_output - Y.T)
-            # Cálculo del gradiente local en la capa oculta
-            # Producto punto de los pesos por el error de la capa siguiente (salida) * derivada de la fn de activación
-            d_hidden = np.dot(output_layer_weights.T, d_output)*self.activation_function_derivative(hidden_layer_input) 
+            """" Cálculo de la Jacobiana """
+            # Tamaño = patrones * pesos
+            Jacobian = np.zeros((n_samples, n_weights))
+            for sample in range(n_samples):
+                # Patron de entrada
+                x = X[sample]
+                # Entradas y salidas de la neurona oculta
+                z_h = hidden_layer_input[sample]
+                h = hidden_layer_output[sample]
+                # Entradas y salidas de la neurona de salida
+                z_o = output_layer_input[sample]
+                o = output_layer_output[sample]
 
-            """Actualizar los pesos"""
-            # Pesos de la capa de salida, junto con bias
-            # wj(k+1) = wj(k) + n*gj(k)*yi(k)
-            output_layer_weights = output_layer_weights - self.u*np.dot(d_output, hidden_layer_output.T)
-            output_layer_bias = output_layer_bias - self.u*np.sum(d_output, axis=1, keepdims=True)
-            # Pesos de la capa de salida, junto con bias
-            # wj(k+1) = wj(k) + n*gj(k)*yi(k)
-            hidden_layer_weights = hidden_layer_weights - self.u*np.dot(d_hidden, X)
-            hidden_layer_bias = hidden_layer_bias - self.u*np.sum(d_hidden, axis=1, keepdims=True)
+                start_idx = 0
+                """ Cálculo para columnas de la capa oculta """
+                # 2 entradas * n neuronas de capa oculta
+                for i in range(input_size):
+                    for j in range(self.n):
+                        Jacobian[sample, start_idx] = x[i] + self.activation_function_derivative(z_h[j])*w_hidden_output[j]
+                        start_idx += 1
+                
+                # 1 bias por neurona
+                for i in range(self.n):
+                    Jacobian[sample, start_idx] = self.activation_function_derivative(z_h[i])*w_hidden_output[i]
+                    start_idx += 1
+
+                """ Cálculo para columnas de capa de salida """
+                # n entradas (salida capa oculta) * i de capa de salida (1) 
+                for i in range(self.n):
+                    for j in range(output_size):
+                        Jacobian[sample, start_idx] = h[i] * self.activation_function_derivative(z_o[j])
+                        start_idx += 1
+
+                # 1 bias por neurona de salida
+                for i in range(output_size):
+                    Jacobian[sample, start_idx] = self.activation_function_derivative(z_o[i])
+                    start_idx += 1
+
+            """ Calculo de Hessiana """
+            # Calculo del vector error
+            E = Y - output_layer_output
+
+            """ Cálculo de delta """
+            # (JkT*Jk + uI)^-1 * JkT*ek
+            delta = np.linalg.pinv(Jacobian.T @ Jacobian + self.mu * np.eye(Jacobian.shape[1])) @ Jacobian.T @ E
+
+            """ Actualización de pesos """
+            # Pesos de entrada a capa oculta
+            w_input_hidden = w_input_hidden + self.learning_rate*delta[:input_size*self.n].reshape((input_size, self.n))
+            # Pesos de bias en capa oculta
+            b_hidden = b_hidden + self.learning_rate*delta[input_size * self.n:input_size * self.n + self.n].reshape((1, self.n))
+            # Pesos de entrada a capa de salida
+            w_hidden_output = w_hidden_output + self.learning_rate * delta[input_size * self.n + self.n:-output_size].reshape((self.n, output_size))
+            # Pesos de bias en capa de salida
+            b_output = b_output + self.learning_rate * delta[-output_size:].reshape((1, output_size))
 
             epochs += 1
             self.plot_solutions.append({
                 "error": error,
                 "epoch": epochs,
                 "solution": {
-                    "wh": hidden_layer_weights,
-                    "bh": hidden_layer_bias,
-                    "wo": output_layer_weights,
-                    "bo": output_layer_bias
+                    "wh": w_input_hidden,
+                    "bh": b_hidden,
+                    "wo": w_hidden_output,
+                    "bo": b_output
                 }
             })
 
         if self.ui.just_output.isChecked():
-            self.plot_solutions = [ self.plot_solutions[-1] ] 
+            self.plot_solutions = [ self.plot_solutions[-1] ]
         print(f"Entrenamiento finalizado en {epochs} épocas con error {error}")
         self.plot_with_delay()
 
@@ -225,9 +261,9 @@ class MainWindow(QMainWindow):
         input_data = np.column_stack((X.ravel(), Y.ravel())).T
 
         """Etapa hacia adelante"""
-        hidden_layer_input = np.dot(hidden_layer_weights, input_data) + hidden_layer_bias
+        hidden_layer_input = np.dot(hidden_layer_weights.T, input_data) + hidden_layer_bias.T
         hidden_layer_output = self.activation_function(hidden_layer_input)
-        output_layer_input = np.dot(output_layer_weights, hidden_layer_output) + output_layer_bias
+        output_layer_input = np.dot(output_layer_weights.T, hidden_layer_output) + output_layer_bias
         output_layer_output = self.activation_function(output_layer_input)
         return output_layer_output.reshape(X.shape)
 
@@ -255,10 +291,10 @@ class MainWindow(QMainWindow):
             if i == self.n:
                 self.ui.result_table.item(i, 2).setText(f"{solution['wo'][0,0]:.4g}")
             else:
-                self.ui.result_table.item(i, 0).setText(f"{solution['wh'][i,0]:.4g}")
-                self.ui.result_table.item(i, 1).setText(f"{solution['wh'][i,1]:.4g}")
-                self.ui.result_table.item(i, 2).setText(f"{solution['bh'][i,0]:.4g}")
-                self.ui.result_table.item(i, 3).setText(f"{solution['wo'][0,i]:.4g}")
+                self.ui.result_table.item(i, 0).setText(f"{solution['wh'][0, i]:.4g}")
+                self.ui.result_table.item(i, 1).setText(f"{solution['wh'][1, i]:.4g}")
+                self.ui.result_table.item(i, 2).setText(f"{solution['bh'][0, i]:.4g}")
+                self.ui.result_table.item(i, 3).setText(f"{solution['wo'][i, 0]:.4g}")
 
         custom_colors = CUSTOM_COLORS
         custom_levels = np.linspace(-1, 1, len(custom_colors))
@@ -302,7 +338,7 @@ class MainWindow(QMainWindow):
         self.ui.result_table.setRowCount(self.n + 1)     
         for i in range(1, self.n + 2):
             item = QTableWidgetItem(f"N{i}") if i != (self.n + 1) else QTableWidgetItem("NO")
-            self.ui.result_table.setVerticalHeaderItem(i-1, item)
+            self.ui.result_table.setVerticalHeaderItem(i - 1, item)
 
         for i in range(self.ui.result_table.rowCount()):
             for j in range(self.ui.result_table.columnCount()):
