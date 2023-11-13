@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
         if self.target_error <= 0:
             return self.print_error("Datos erroneos", "Error objetivo debe ser positivo")
         
-        if self.mu <= 0 or self.mu >= 1:
+        if self.mu <= 0 or self.mu > 10:
             return self.print_error("Datos erroneos", "Mu debe estar entre 0.01 y 0.1")
         
         self.init_table()
@@ -148,7 +148,6 @@ class MainWindow(QMainWindow):
         input_size = 2
         output_size = 1
 
-        np.random.seed(0)
         # Pesos capa oculta (2 entradas * n neuronas) y bias (1 * n neuronas)
         w_input_hidden = np.random.rand(input_size, self.n)
         b_hidden = np.random.rand(1, self.n)
@@ -223,23 +222,24 @@ class MainWindow(QMainWindow):
             # Pesos de entrada a capa oculta
             w_input_hidden = w_input_hidden + self.learning_rate*delta[:input_size*self.n].reshape((input_size, self.n))
             # Pesos de bias en capa oculta
-            b_hidden = b_hidden + self.learning_rate*delta[input_size * self.n:input_size * self.n + self.n].reshape((1, self.n))
+            b_hidden = b_hidden + self.learning_rate*delta[input_size*self.n:input_size*self.n + self.n].reshape((1, self.n))
             # Pesos de entrada a capa de salida
-            w_hidden_output = w_hidden_output + self.learning_rate * delta[input_size * self.n + self.n:-output_size].reshape((self.n, output_size))
+            w_hidden_output = w_hidden_output + self.learning_rate*delta[input_size * self.n + self.n:-output_size].reshape((self.n, output_size))
             # Pesos de bias en capa de salida
-            b_output = b_output + self.learning_rate * delta[-output_size:].reshape((1, output_size))
+            b_output = b_output + self.learning_rate*delta[-output_size:].reshape((1, output_size))
 
             epochs += 1
-            self.plot_solutions.append({
-                "error": error,
-                "epoch": epochs,
-                "solution": {
-                    "wh": w_input_hidden,
-                    "bh": b_hidden,
-                    "wo": w_hidden_output,
-                    "bo": b_output
-                }
-            })
+            if epochs % 10 == 0:
+                self.plot_solutions.append({
+                    "error": error,
+                    "epoch": epochs,
+                    "solution": {
+                        "wh": w_input_hidden,
+                        "bh": b_hidden,
+                        "wo": w_hidden_output,
+                        "bo": b_output
+                    }
+                })
 
         if self.ui.just_output.isChecked():
             self.plot_solutions = [ self.plot_solutions[-1] ]
@@ -247,10 +247,12 @@ class MainWindow(QMainWindow):
         self.plot_with_delay()
 
     def activation_function(self, v):
+        # return 1/(1 + np.exp(-v))
         return np.tanh(v)
     
     def activation_function_derivative(self, v):
-        return (1 - self.activation_function(v))*(1 + self.activation_function(v))
+        # return self.activation_function(v) * (1 - self.activation_function(v))
+        return 1 - np.tanh(v)**2
     
     def classificate(self, solution, X, Y):
         hidden_layer_weights = solution["wh"]

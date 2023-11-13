@@ -59,16 +59,29 @@ class Ui_MainWindow(object):
         self.just_output = QCheckBox(self.groupBox_4)
         self.just_output.setObjectName(u"just_output")
         self.just_output.setFont(font)
+        self.just_output.setChecked(True)
 
-        self.gridLayout_3.addWidget(self.just_output, 9, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.just_output, 8, 1, 1, 2)
+
+        self.mu = QLineEdit(self.groupBox_4)
+        self.mu.setObjectName(u"mu")
+        font1 = QFont()
+        font1.setPointSize(12)
+        self.mu.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.mu, 1, 2, 1, 1)
 
         self.learning_rate = QLineEdit(self.groupBox_4)
         self.learning_rate.setObjectName(u"learning_rate")
-        font1 = QFont()
-        font1.setPointSize(12)
         self.learning_rate.setFont(font1)
 
         self.gridLayout_3.addWidget(self.learning_rate, 0, 2, 1, 1)
+
+        self.label_8 = QLabel(self.groupBox_4)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.label_8, 1, 1, 1, 1)
 
         self.n_neurons = QComboBox(self.groupBox_4)
         self.n_neurons.addItem("")
@@ -106,19 +119,13 @@ class Ui_MainWindow(object):
         self.begin_button.setObjectName(u"begin_button")
         self.begin_button.setFont(font1)
 
-        self.gridLayout_3.addWidget(self.begin_button, 12, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.begin_button, 11, 1, 1, 2)
 
         self.iteration_label = QLabel(self.groupBox_4)
         self.iteration_label.setObjectName(u"iteration_label")
         self.iteration_label.setFont(font)
 
         self.gridLayout_3.addWidget(self.iteration_label, 5, 2, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox_4)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setFont(font)
-
-        self.gridLayout_3.addWidget(self.label_4, 7, 1, 1, 1)
 
         self.label_6 = QLabel(self.groupBox_4)
         self.label_6.setObjectName(u"label_6")
@@ -142,7 +149,7 @@ class Ui_MainWindow(object):
         self.clear_button.setObjectName(u"clear_button")
         self.clear_button.setFont(font1)
 
-        self.gridLayout_3.addWidget(self.clear_button, 11, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.clear_button, 10, 1, 1, 2)
 
         self.max_iterations = QLineEdit(self.groupBox_4)
         self.max_iterations.setObjectName(u"max_iterations")
@@ -207,19 +214,7 @@ class Ui_MainWindow(object):
         self.result_table.horizontalHeader().setCascadingSectionResizes(False)
         self.result_table.horizontalHeader().setDefaultSectionSize(75)
 
-        self.gridLayout_3.addWidget(self.result_table, 8, 1, 1, 2)
-
-        self.label_8 = QLabel(self.groupBox_4)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setFont(font1)
-
-        self.gridLayout_3.addWidget(self.label_8, 1, 1, 1, 1)
-
-        self.mu = QLineEdit(self.groupBox_4)
-        self.mu.setObjectName(u"mu")
-        self.mu.setFont(font1)
-
-        self.gridLayout_3.addWidget(self.mu, 1, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.result_table, 7, 1, 1, 2)
 
 
         self.gridLayout.addWidget(self.groupBox_4, 0, 1, 1, 1)
@@ -255,7 +250,9 @@ class Ui_MainWindow(object):
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Datos de entrenamiento", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u00c9poca", None))
         self.just_output.setText(QCoreApplication.translate("MainWindow", u"Graficar solo \u00faltima \u00e9poca", None))
+        self.mu.setText(QCoreApplication.translate("MainWindow", u"0.1", None))
         self.learning_rate.setText(QCoreApplication.translate("MainWindow", u"0.2", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Mu", None))
         self.n_neurons.setItemText(0, QCoreApplication.translate("MainWindow", u"3", None))
         self.n_neurons.setItemText(1, QCoreApplication.translate("MainWindow", u"4", None))
         self.n_neurons.setItemText(2, QCoreApplication.translate("MainWindow", u"5", None))
@@ -270,7 +267,6 @@ class Ui_MainWindow(object):
         self.target_error.setText(QCoreApplication.translate("MainWindow", u"0.08", None))
         self.begin_button.setText(QCoreApplication.translate("MainWindow", u"Iniciar", None))
         self.iteration_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Graficar solo salida", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Error objetivo", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Neuronas capa oculta", None))
         self.error_label.setText(QCoreApplication.translate("MainWindow", u"-", None))
@@ -298,8 +294,6 @@ class Ui_MainWindow(object):
         self.result_table.setSortingEnabled(False)
         self.result_table.setSortingEnabled(__sortingEnabled)
 
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Mu", None))
-        self.mu.setText(QCoreApplication.translate("MainWindow", u"0.1", None))
         self.menuGuardar_dataset.setTitle(QCoreApplication.translate("MainWindow", u"Dataset", None))
     # retranslateUi
 

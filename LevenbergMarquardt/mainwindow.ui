@@ -42,7 +42,7 @@
             </property>
            </widget>
           </item>
-          <item row="9" column="1" colspan="2">
+          <item row="8" column="1" colspan="2">
            <widget class="QCheckBox" name="just_output">
             <property name="font">
              <font>
@@ -51,6 +51,21 @@
             </property>
             <property name="text">
              <string>Graficar solo última época</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="mu">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.1</string>
             </property>
            </widget>
           </item>
@@ -63,6 +78,18 @@
             </property>
             <property name="text">
              <string>0.2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Mu</string>
             </property>
            </widget>
           </item>
@@ -151,7 +178,7 @@
             </property>
            </widget>
           </item>
-          <item row="12" column="1" colspan="2">
+          <item row="11" column="1" colspan="2">
            <widget class="QPushButton" name="begin_button">
             <property name="font">
              <font>
@@ -172,18 +199,6 @@
             </property>
             <property name="text">
              <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLabel" name="label_4">
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Graficar solo salida</string>
             </property>
            </widget>
           </item>
@@ -223,7 +238,7 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="1" colspan="2">
+          <item row="10" column="1" colspan="2">
            <widget class="QPushButton" name="clear_button">
             <property name="font">
              <font>
@@ -259,7 +274,7 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="1" colspan="2">
+          <item row="7" column="1" colspan="2">
            <widget class="QTableWidget" name="result_table">
             <property name="editTriggers">
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -374,30 +389,6 @@
               <string/>
              </property>
             </item>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_8">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Mu</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="mu">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>0.1</string>
-            </property>
            </widget>
           </item>
          </layout>
